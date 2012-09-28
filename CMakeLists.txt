@@ -14,6 +14,7 @@ else()
 	set( CMAKE_CXX_FLAGS "-std=c++11 -O3 -Wall -Wextra -pedantic -Werror" )
 endif()
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+#et(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
 add_subdirectory(src)
