@@ -60,7 +60,7 @@ int set_logfile(const string& filename);
  * @param level debuglevel (lower means less important)
  * @param ... parameters that will be converted to a string and printed
  */
-#define debug(level, ...) _debug( __FILE__, __LINE__, (level), text(__VA_ARGS__) )
+#define debug(level, ...) ::logging::_debug( __FILE__, __LINE__, (level), ::logging::text(__VA_ARGS__) )
 
 /**
  * Print a debugmessage; this won't do anything in release-builds.
@@ -68,7 +68,7 @@ int set_logfile(const string& filename);
  * @param ... the first parameter is a formatstring that will, 
  *            together with the rest, create the message
  */
-#define debugf(level, ...) _debug( __FILE__, __LINE__, (level), textf(__VA_ARGS__) )
+#define debugf(level, ...) ::logging::_debug( __FILE__, __LINE__, (level), ::logging::textf(__VA_ARGS__) )
 
 /**
  * Set the debug-level: only debug-messages with a level higher that it will be processed.
@@ -182,6 +182,19 @@ void fatalf(const string& formatstring, T... args);
  */
 string get_timestamp();
 
+
+/**
+ * disable printing to stdout from all printfunctions of this unit.
+ * @param quiet true = disable printing, false = enable
+ */
+void set_stdout_quiet(bool quiet = true);
+
+
+/**
+ * disable printing to stderr from all printfunctions of this unit.
+ * @param quiet true = disable printing, false = enable
+ */
+void set_stderr_quiet(bool quiet = true);
 
 /**
  * Write a message to stdout or stderr and to the log.

@@ -28,6 +28,8 @@ namespace impl{
 	static int verbose_level = 0;
 	static int logfile = 0; //filedescriptor
 	static int debug_level = 0;
+	static bool stdout_quiet = false;
+	static bool stderr_quiet = false;
 }
 
 void set_verbosity(int level){
@@ -106,10 +108,14 @@ string get_timestamp(){
 
 void print_and_log(const string& msg, bool normal){
 	if( normal ){
-		cout << msg << std::endl;
+		if(!impl::stdout_quiet){
+			cout << msg << std::endl;
+		}
 	}
 	else{
-		cerr << msg << std::endl;
+		if(!impl::stderr_quiet){
+			cerr << msg << std::endl;
+		}
 	}
 	if( impl::logfile ){
 		string str = "[" + get_timestamp() + "] " + msg + '\n';
@@ -117,6 +123,14 @@ void print_and_log(const string& msg, bool normal){
 			cerr << "Error: Could not write to logfile, Errorcode:" << errno << endl;
 		}
 	}
+}
+
+void set_stdout_quiet(bool quiet){
+	impl::stdout_quiet = quiet;
+}
+
+void set_stderr_quiet(bool quiet){
+	impl::stderr_quiet = quiet;
 }
 
 string _textf_impl(const std::vector<string>& strings){
