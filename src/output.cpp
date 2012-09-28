@@ -17,8 +17,11 @@ using namespace std;
 //in fact, those are like private members:
 namespace impl{
 	static int verbose_level = 0;
-	static int debug_level = 0;
 	static int logfile = 0; //filedescriptor
+	
+#ifdef DEBUG
+	static int debug_level = 0;
+#endif //debug
 }
 
 void set_verbose_level(int v){
