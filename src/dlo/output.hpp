@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 
-namespace logging {
+namespace dlo {
 
 using std::string;
 using std::stringstream;
@@ -60,7 +60,7 @@ int set_logfile(const string& filename);
  * @param level debuglevel (lower means less important)
  * @param ... parameters that will be converted to a string and printed
  */
-#define debug(level, ...) ::logging::_debug( __FILE__, __LINE__, (level), ::logging::text(__VA_ARGS__) )
+#define debug(level, ...) ::dlo::_debug( __FILE__, __LINE__, (level), ::dlo::text(__VA_ARGS__) )
 
 /**
  * Print a debugmessage; this won't do anything in release-builds.
@@ -68,7 +68,7 @@ int set_logfile(const string& filename);
  * @param ... the first parameter is a formatstring that will, 
  *            together with the rest, create the message
  */
-#define debugf(level, ...) ::logging::_debug( __FILE__, __LINE__, (level), ::logging::textf(__VA_ARGS__) )
+#define debugf(level, ...) ::dlo::_debug( __FILE__, __LINE__, (level), ::dlo::textf(__VA_ARGS__) )
 
 /**
  * Set the debug-level: only debug-messages with a level higher that it will be processed.
@@ -205,7 +205,7 @@ void set_stderr_quiet(bool quiet = true);
  */
 void print_and_log(const string& msg, bool normal = true);
 
-} //logging namespace
+} //dlo namespace
 
 //include the template-implementations:
 #include "output.tcc"

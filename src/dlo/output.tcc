@@ -5,7 +5,7 @@
 #ifndef output_tcc
 #define output_tcc
 
-namespace logging {
+namespace dlo {
 
 using std::string;
 using std::stringstream;

@@ -16,7 +16,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-namespace logging{
+namespace dlo{
 
 using std::to_string;
 using std::cout;
@@ -87,7 +87,8 @@ void _error(string text){
 	print_and_log("ERROR: " + text, false);
 }
 
-class fatal_error_exception{};
+class fatal_error_exception{
+};
 
 void _fatal(string text){
 	print_and_log("FATAL: " + text, false);
