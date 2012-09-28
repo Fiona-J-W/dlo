@@ -31,7 +31,7 @@ namespace impl{
 	static int debug_level = 0;
 }
 
-void set_verbose_level(int v){
+void set_verbosity(int v){
 	impl::verbose_level=v;
 }
 

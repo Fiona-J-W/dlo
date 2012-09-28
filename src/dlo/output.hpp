@@ -77,7 +77,7 @@ void set_debug_level(int level);
 
 
 #else // not DEBUG-mode
-// these declarations are just here to enable compilation
+// these declarations are just here to enable compilation:
 #define debug(level, ...)
 #define debugf(level, ...)
 #define set_debug_level(level)
@@ -85,10 +85,10 @@ void set_debug_level(int level);
 
 
 /**
- * set the verbosity level: only notes with a level <= @param v will be
- * printed
+ * set the verbosity level
+ * @param v the highest level, that will be printed
  */
-void set_verbose_level(int v);
+void set_verbosity(int v);
 
 
 /**
@@ -187,6 +187,7 @@ void print_and_log(const string& msg, bool normal = true);
 
 } //logging namespace
 
+//include the template-implementations:
 #include "output.tcc"
 
 #endif
