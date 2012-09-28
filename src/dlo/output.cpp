@@ -1,3 +1,9 @@
+
+
+//this might be used to create a library for debugging, so:
+#ifndef DEBUG
+#define DEBUG
+#endif
 #include "output.hpp"
 
 #include <iostream>
@@ -11,16 +17,6 @@
 #include <fcntl.h>
 
 namespace logging{
-
-//this might be used to create a library for debugging, so:
-#undef debug
-#undef debugf
-#ifdef set_debug_level
-#undef set_debug_level
-#endif
-
-#define debug(level, ...) _debug( __FILE__, __LINE__, (level), text(__VA_ARGS__) )
-#define debugf(level, ...) _debug( __FILE__, __LINE__, (level), textf(__VA_ARGS__) )
 
 using namespace std;
 

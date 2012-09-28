@@ -80,7 +80,8 @@ void set_debug_level(int level);
 // these declarations are just here to enable compilation:
 #define debug(level, ...)
 #define debugf(level, ...)
-#define set_debug_level(level)
+//#define set_debug_level(level)
+inline void set_debug_level(int){}
 #endif
 
 
@@ -127,7 +128,7 @@ void warn(T... args);
  * @param args the args that will be converted to a string
  */
 template<typename... T>
-void warn(const string& formatstring, T... args);
+void warnf(const string& formatstring, T... args);
 
 
 /**
