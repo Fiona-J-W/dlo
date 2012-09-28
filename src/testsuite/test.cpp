@@ -11,7 +11,6 @@ int main(int argc, char **argv){
 	debug(0,"foo ", "bar", " baz ", 3, " ", 4, ' ');
 	debugf(1,"some debugmessage with data: %s and %s", 1, 2);
 	note(0, "some note");
-	note(1, "some other note");
+	notef(1, "some other, %s note", "formated");
 	warn("Programm is going to terminate NOW!");
-	set_verbosity(1);
 }

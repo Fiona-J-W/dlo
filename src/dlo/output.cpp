@@ -18,7 +18,10 @@
 
 namespace logging{
 
-using namespace std;
+using std::to_string;
+using std::cout;
+using std::cerr;
+using std::endl;
 
 //in fact, those are like private members:
 namespace impl{
@@ -126,6 +129,9 @@ string _textf_impl(const std::vector<string>& strings){
 	unsigned int unspecified_inserts = 1;
 	while(getline(formatstream, tmp, '%')){
 		resultstream << tmp;
+		if( formatstream.eof() ){
+			break;
+		}
 		switch(formatstream.peek()){
 			case '%': 
 				resultstream << '%'; 

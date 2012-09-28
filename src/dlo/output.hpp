@@ -24,11 +24,11 @@ string text(T...args);
  *
  * Unlike printf() this will accept any type with %s as identifier.
  *
- * The formatstring will be printed as is, unless a '%' appears. In
+ * The formatstring will be printed as is, unless a percent-sign appears. In
  * this case the next character will be used to decide, what to do:
  *
- * If it is another '%', only one of them will be added to the returnstring
- * and the function will return back to its normal path.
+ * If it is another percent-sign, only one of them will be added to the 
+ * returnstring and the function will return back to its normal path.
  * 
  * If it is a 's', a counter will be increased and the string-representation of
  * args[counter] will be added to the string.
@@ -58,15 +58,15 @@ int set_logfile(const string& filename);
 /**
  * Print a debugmessage; this won't do anything in release-builds.
  * @param level debuglevel (lower means less important)
- * @param others parameters that will be converted to a string and printed
+ * @param ... parameters that will be converted to a string and printed
  */
 #define debug(level, ...) _debug( __FILE__, __LINE__, (level), text(__VA_ARGS__) )
 
 /**
  * Print a debugmessage; this won't do anything in release-builds.
  * @param level debuglevel (lower means less important)
- * @param others the first parameter is a formatstring that will, 
- *               together with the rest, create the message
+ * @param ... the first parameter is a formatstring that will, 
+ *            together with the rest, create the message
  */
 #define debugf(level, ...) _debug( __FILE__, __LINE__, (level), textf(__VA_ARGS__) )
 
