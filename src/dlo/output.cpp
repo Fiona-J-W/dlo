@@ -27,13 +27,14 @@ namespace impl{
 	static int debug_level = 0;
 }
 
-void set_verbosity(int v){
-	impl::verbose_level=v;
+void set_verbosity(int level){
+	impl::verbose_level=level;
 }
 
-void set_logfile(const string& filename){
+int set_logfile(const string& filename){
 	if(impl::logfile){
-		int tmp = impl::logfile;
+		//do this with a temp var to prevent race-conditions:
+		volatile int tmp = impl::logfile;
 		impl::logfile = 0;
 		close(tmp);
 	}
@@ -41,10 +42,13 @@ void set_logfile(const string& filename){
 		if( (impl::logfile = open(filename.c_str(),O_WRONLY | O_CREAT | O_APPEND, 0666)) == -1){
 			impl::logfile = 0;
 			error("Could not open logfile.");
+			return -1;
 		}
 		else{
+			return 0;
 		}
 	}
+	return 0;
 }
 
 void _debug(string filename, int line, int level, string text){
@@ -91,6 +95,7 @@ string get_timestamp(){
 	time_t t = time(NULL);
 	
 	strftime(buffer, 28, "%x %X", localtime(&t));
+	
 	
 	string returnstr = buffer;
 	return returnstr;

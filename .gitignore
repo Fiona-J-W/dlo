@@ -2,4 +2,6 @@ build/
 bin/
 doc/
 *.swp
+*~
 test.log
+CMakeLists.txt.user

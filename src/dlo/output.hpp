@@ -20,9 +20,9 @@ template<typename... T>
 string text(T...args);
 
 /**
- * create a string from a formatstring and some arguments
+ * Create a string from a formatstring and some arguments.
  *
- * unlike printf() this will accept any type with %s as identifier
+ * Unlike printf() this will accept any type with %s as identifier.
  *
  * The formatstring will be printed as is, unless a '%' appears. In
  * this case the next character will be used to decide, what to do:
@@ -49,20 +49,21 @@ string textf(const string& formatstring,T...args);
  * set the logfile
  *
  * @param filename logfile; if empty, logging will be disabled
+ * @returns 0 if the logfile could be opened for writing, otherwise -1
  */
-void set_logfile(const string& filename);
+int set_logfile(const string& filename);
 
 #ifdef DEBUG
 
 /**
- * print a debugmessage; this won't do anything in release-builds
+ * Print a debugmessage; this won't do anything in release-builds.
  * @param level debuglevel (lower means less important)
  * @param others parameters that will be converted to a string and printed
  */
 #define debug(level, ...) _debug( __FILE__, __LINE__, (level), text(__VA_ARGS__) )
 
 /**
- * print a debugmessage; this won't do anything in release-builds
+ * Print a debugmessage; this won't do anything in release-builds.
  * @param level debuglevel (lower means less important)
  * @param others the first parameter is a formatstring that will, 
  *               together with the rest, create the message
@@ -70,7 +71,7 @@ void set_logfile(const string& filename);
 #define debugf(level, ...) _debug( __FILE__, __LINE__, (level), textf(__VA_ARGS__) )
 
 /**
- * set the debug-level: only debug-messages with a level higher that it will be processed.
+ * Set the debug-level: only debug-messages with a level higher that it will be processed.
  * @param level the new debuglevel
  */
 void set_debug_level(int level);
@@ -80,20 +81,23 @@ void set_debug_level(int level);
 // these declarations are just here to enable compilation:
 #define debug(level, ...)
 #define debugf(level, ...)
-//#define set_debug_level(level)
+
+// let's hope the compiler will really inline this; 
+// otherwise there will be ugly linker-errors (seems
+// to work with gcc):
 inline void set_debug_level(int){}
 #endif
 
 
 /**
- * set the verbosity level
- * @param v the highest level, that will be printed
+ * Set the verbosity level.
+ * @param level the highest level, that will be printed
  */
-void set_verbosity(int v);
+void set_verbosity(int level);
 
 
 /**
- * print a note with the given urgency-level 
+ * Print a note with the given urgency-level.
  * @param level urgency-level ot the message
  * @param args the args that will be converted to a string and then concatenated to 
  *             form the message, that will be printed
@@ -103,7 +107,7 @@ void note(int level, T...args);
 
 
 /**
- * print a note with the given urgency-level 
+ * Print a note with the given urgency-level.
  * @param level urgency-level ot the message
  * @param formatstring a string that describes how the message should be build and 
  *                     uses the other args to build the final text.
@@ -114,7 +118,7 @@ void notef(int level, const string& formatstring, T...args);
 
 
 /**
- * print a warning to stderr and log it, if a logfile is set.
+ * Print a warning to stderr and log it, if a logfile is set.
  * @param args the args that will be converted to a string and then concatenated to 
  *             form the message, that will be printed
  */
@@ -122,7 +126,7 @@ template<typename... T>
 void warn(T... args);
 
 /**
- * print a warning to stderr and log it, if a logfile is set.
+ * Print a warning to stderr and log it, if a logfile is set.
  * @param formatstring a string that describes how the message should be build and 
  *                     uses the other args to build the final text.
  * @param args the args that will be converted to a string
@@ -132,7 +136,7 @@ void warnf(const string& formatstring, T... args);
 
 
 /**
- * print an error to stderr and log it, if a logfile is set.
+ * Print an error to stderr and log it, if a logfile is set.
  * @param args the args that will be converted to a string and then concatenated to 
  *             form the message, that will be printed
  */
@@ -140,7 +144,7 @@ template<typename... T>
 void error(T... args);
 
 /**
- * print an error to stderr and log it, if a logfile is set.
+ * Print an error to stderr and log it, if a logfile is set.
  * @param formatstring a string that describes how the message should be build and 
  *                     uses the other args to build the final text.
  * @param args the args that will be converted to a string
@@ -149,7 +153,7 @@ template<typename... T>
 void errorf(const string& formatstring, T... args);
 
 /**
- * print a fatal error. This will throw a private exception to terminate the
+ * Print a fatal error. This will throw a private exception to terminate the
  * program. You may want to ensure that the destructors are executed by encapsulating
  * your main with a catch(...){return 1;} block.
  *
@@ -160,7 +164,7 @@ template<typename... T>
 void fatal(T... args);
 
 /**
- * print a fatal error. This will throw a private exception to terminate the
+ * Print a fatal error. This will throw a private exception to terminate the
  * program. You may want to ensure that the destructors are executed by encapsulating
  * your main with a catch(...){return 1;} block.
  *
@@ -172,13 +176,15 @@ template<typename... T>
 void fatalf(const string& formatstring, T... args);
 
 /**
- * get the current time
+ * Get the current time.
+ *
+ * @returns a string with the format "DD/MM/YY hh:mm:ss"
  */
 string get_timestamp();
 
 
 /**
- * write a message to stdout or stderr and to the log
+ * Write a message to stdout or stderr and to the log.
  * 
  * @param msg the message that will be printed
  * @param normal whether the message is normal behaviour and should be 

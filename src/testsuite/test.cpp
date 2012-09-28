@@ -13,4 +13,5 @@ int main(int argc, char **argv){
 	note(0, "some note");
 	note(1, "some other note");
 	warn("Programm is going to terminate NOW!");
+	set_verbosity(1);
 }
