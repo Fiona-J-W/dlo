@@ -15,12 +15,12 @@ sig_atomic_t signalhandling::signal;
 struct sigaction signalhandling::handler_struct;
 
 //declare the actual signalhandler:
-void signalHandler(int signal);
+void signal_handler(int signal);
 
 
 void signalhandling::init(vector<unsigned int> sigs){
 	signal = 0;
-	handler_struct.sa_handler = signalHandler;
+	handler_struct.sa_handler = signal_handler;
 	for(auto it = sigs.begin(); it != sigs.end(); ++it){
 		if(*it > SIG_ATOMIC_MAX){
 			throw std::invalid_argument("the number of a given signal"
@@ -67,6 +67,5 @@ int signal_exception::sig_num(){
 	return _sig_num;
 }
 
-	
 
 } //namespace dlo
