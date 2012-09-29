@@ -12,7 +12,7 @@ using std::vector;
 
 //put the instances of the static vars here:
 sig_atomic_t signalhandling::signal;
-struct sigaction signalhandling::handlerStruct;
+struct sigaction signalhandling::handler_struct;
 
 //declare the actual signalhandler:
 void signalHandler(int signal);
@@ -20,7 +20,7 @@ void signalHandler(int signal);
 
 void signalhandling::init(vector<unsigned int> sigs){
 	signal = 0;
-	handlerStruct.sa_handler = signalHandler;
+	handler_struct.sa_handler = signalHandler;
 	for(auto it = sigs.begin(); it != sigs.end(); ++it){
 		if(*it > SIG_ATOMIC_MAX){
 			throw std::invalid_argument("the number of a given signal"
@@ -30,12 +30,12 @@ void signalhandling::init(vector<unsigned int> sigs){
 			throw std::invalid_argument("the number of a given signal"
 				"is to small (<1) to be handled by this class");
 		}
-		sigaction(*it, &handlerStruct, NULL);
+		sigaction(*it, &handler_struct, NULL);
 	}
 }
 
 
-unsigned int signalhandling::getLastSig(){
+unsigned int signalhandling::get_last_signal(){
 	return signal;
 }
 
@@ -47,7 +47,7 @@ unsigned int signalhandling::reset(){
 	return returnval;
 }
 
-void signalHandler(int signal){
+void signal_handler(int signal){
 	signalhandling::signal = signal;
 }
 

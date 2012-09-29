@@ -20,10 +20,13 @@ namespace dlo{
  */
 class signalhandling{
 public:
+	/**
+	 * We don't need a constructor, so let's delete it.
+	 */
+	signalhandling() = delete;
 	
 	/**
 	 * init function for signalhandling. This has to be called early.
-	 * This version of the function will be used, if C++11 is available.
 	 * @param sigs vector of the signals, that should be handled (defaults to 
 	 *        SIGINT and SIGTERM)
 	 * @throws std::invalid_argument if a given signals number cannot be stored
@@ -36,7 +39,7 @@ public:
 	/**
 	 * query for the last signal; this will return 0 if no signal has been caught.
 	 */
-	static unsigned int getLastSig();
+	static unsigned int get_last_signal();
 	
 	/**
 	 * reset the saved signal to 0. 
@@ -53,15 +56,10 @@ public:
 private:
 	
 	/**
-	 * private constructor: There is no need to create an instance
-	 */
-	signalhandling(){}
-	
-	/**
 	 * the actual handlerfunction, that will set signalhandling::signal to 
 	 * the new value
 	 */
-	friend void signalHandler(int signal);
+	friend void signal_handler(int signal);
 	
 	//attributes:
 	
@@ -74,7 +72,7 @@ private:
 	 * struct that contains the information, what should be done after recieving
 	 * a signal
 	 */
-	static struct sigaction handlerStruct;
+	static struct sigaction handler_struct;
 };
 
 } //namespace ldo

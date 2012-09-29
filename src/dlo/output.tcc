@@ -33,93 +33,46 @@ void _debug(string filename, int line, int level, string text);
 
 template<typename... T>
 void note(int level, T...args){
-	_note( level, text(args...) );
+	_note( level, stringutils::text(args...) );
 }
 
 template<typename... T>
 void notef(int level, const string& formatstring, T...args){
-	_note( level, textf(formatstring, args...) );
+	_note( level, stringutils::textf(formatstring, args...) );
 }
 
 
 template<typename... T>
 void warn(T...args){
-	_warn( text(args...) );
+	_warn( stringutils::text(args...) );
 }
 
 template<typename... T>
 void warnf(const string& formatstring, T...args){
-	_warn( textf(formatstring, args...) );
+	_warn( stringutils::textf(formatstring, args...) );
 }
 
 
 template<typename... T>
 void error(T...args){
-	_error( text(args...) );
+	_error( stringutils::text(args...) );
 }
 
 template<typename... T>
 void errorf(const string& formatstring, T...args){
-	_error( textf(formatstring, args...) );
+	_error( stringutils::textf(formatstring, args...) );
 }
 
 
 template<typename... T>
 void fatal(T...args){
-	_fatal( text(args...) );
+	_fatal( stringutils::text(args...) );
 }
 
 template<typename... T>
 void fatalf(const string& formatstring, T...args){
-	_fatal( textf(formatstring, args...) );
+	_fatal( stringutils::textf(formatstring, args...) );
 }
-
-
-template<typename T>
-void _text_helper(stringstream& stream, T arg){
-	stream << arg;
-}
-
-template<typename T, typename... argT>
-void _text_helper(stringstream& stream, T arg,  argT...args){
-	stream << arg;
-	_text_helper(stream, args...);
-}
-
-template<typename... T>
-string text(T...args){
-	stringstream returnstream;
-	_text_helper(returnstream, args...);
-	return returnstream.str();
-}
-
-
-
-template<typename T>
-void _textf_helper(vector<string>& vec, T arg){
-	stringstream tmpstream;
-	tmpstream << arg;
-	vec.push_back(tmpstream.str());
-}
-
-template<typename T, typename... argT>
-void _textf_helper(vector<string>& vec, T arg, argT...args){
-	stringstream tmpstream;
-	tmpstream << arg;
-	vec.push_back(tmpstream.str());
-	_textf_helper(vec, args...);
-}
-
-string _textf_impl(const std::vector<string>& strings);
-
-template<typename...T>
-string textf(const string& formatstring, T...args){
-	vector<string> strings;
-	strings.push_back(formatstring);
-	_textf_helper(strings, args...);
-	return _textf_impl(strings);
-}
-
 
 } //logging namespace
 

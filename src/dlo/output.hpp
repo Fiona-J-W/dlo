@@ -5,44 +5,14 @@
 #include <string>
 #include <sstream>
 
+#include "stringutils.hpp"
+
 namespace dlo {
 
 using std::string;
 using std::stringstream;
 using std::vector;
 
-
-/**
- * convert a list of arguments to a string
- * @param args the arguments
- */
-template<typename... T>
-string text(T...args);
-
-/**
- * Create a string from a formatstring and some arguments.
- *
- * Unlike printf() this will accept any type with %s as identifier.
- *
- * The formatstring will be printed as is, unless a percent-sign appears. In
- * this case the next character will be used to decide, what to do:
- *
- * If it is another percent-sign, only one of them will be added to the 
- * returnstring and the function will return back to its normal path.
- * 
- * If it is a 's', a counter will be increased and the string-representation of
- * args[counter] will be added to the string.
- * 
- * In all other cases the substring that terminates before the first following
- * 's' will be taken and converted to a int. This int will be used as index to 
- * which arg from args shall be inserted. Note that in this case arg[0] is the
- * formatstring itself.
- *
- * @param formatstring the formatstring
- * @param args the other arguments
- */
-template<typename...T>
-string textf(const string& formatstring,T...args);
 
 
 /**
@@ -60,7 +30,7 @@ int set_logfile(const string& filename);
  * @param level debuglevel (lower means less important)
  * @param ... parameters that will be converted to a string and printed
  */
-#define debug(level, ...) ::dlo::_debug( __FILE__, __LINE__, (level), ::dlo::text(__VA_ARGS__) )
+#define debug(level, ...) ::dlo::_debug( __FILE__, __LINE__, (level), ::dlo::stringutils::text(__VA_ARGS__) )
 
 /**
  * Print a debugmessage; this won't do anything in release-builds.
@@ -68,7 +38,7 @@ int set_logfile(const string& filename);
  * @param ... the first parameter is a formatstring that will, 
  *            together with the rest, create the message
  */
-#define debugf(level, ...) ::dlo::_debug( __FILE__, __LINE__, (level), ::dlo::textf(__VA_ARGS__) )
+#define debugf(level, ...) ::dlo::_debug( __FILE__, __LINE__, (level), ::dlo::stringutils::textf(__VA_ARGS__) )
 
 /**
  * Set the debug-level: only debug-messages with a level higher that it will be processed.

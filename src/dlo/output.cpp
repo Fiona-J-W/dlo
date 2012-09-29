@@ -134,45 +134,5 @@ void set_stderr_quiet(bool quiet){
 	impl::stderr_quiet = quiet;
 }
 
-string _textf_impl(const std::vector<string>& strings){
-	if(strings.empty()){
-		throw std::invalid_argument("no formatstring");
-	}
-	stringstream resultstream;
-	stringstream formatstream(strings[0]);
-	string tmp;
-	unsigned int unspecified_inserts = 1;
-	while(getline(formatstream, tmp, '%')){
-		resultstream << tmp;
-		if( formatstream.eof() ){
-			break;
-		}
-		switch(formatstream.peek()){
-			case '%': 
-				resultstream << '%'; 
-				formatstream.ignore();
-				break;
-			case 's':
-				try{
-					resultstream << strings.at(unspecified_inserts);
-					++unspecified_inserts;
-				}
-				catch(std::out_of_range &e){
-					throw std::invalid_argument("invalid formatstring");
-				}
-				formatstream.ignore();
-				break;
-			default:
-				getline(formatstream, tmp, 's');
-				try{
-					resultstream << strings.at(stoi(tmp));
-				}
-				catch(std::out_of_range &e){
-					throw std::invalid_argument("invalid formatstring");
-				}
-		}
-	}
-	return resultstream.str();
-}
 
 } //namespace logging
