@@ -44,7 +44,8 @@ int set_logfile(const string& filename);
 	dlo::_debug( __FILE__, __LINE__, (level), dlo::stringutils::textf((formatstring), __VA_ARGS__) )
 
 /**
- * Set the debug-level: only debug-messages with a level higher that it will be processed.
+ * Set the debug-level: only debug-messages with a level higher that this 
+ * will be printed and logged.
  * @param level the new debuglevel
  */
 void set_debug_level(int level);
@@ -88,6 +89,9 @@ void writefln(const string& formatstring, T...args);
 
 /**
  * Write a message to a stream.
+ * 
+ * This won't be written into the logfile.
+ * 
  * @param stream the outputstream, that the message will be printed to.
  * @param args the args that will be converted to a string and then concatenated to 
  *             form the message, that will be printed
@@ -97,6 +101,9 @@ void writeln(std::ostream& stream, T...args);
 
 /**
  * Write a message to a stream.
+ * 
+ * This won't be written into the logfile.
+ * 
  * @param stream the outputstream, that the message will be printed to.
  * @param formatstring a string that describes how the message should be build and 
  *                     uses the other args to build the final text.
