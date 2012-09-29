@@ -15,6 +15,8 @@ using std::tuple;
 
 // implementation-functions:
 
+void _writeln(string text);
+void _writeln(std::ostream& stream, string text);
 void _note(int level, string text);
 void _warn(string text);
 void _error(string text);
@@ -30,6 +32,26 @@ void _fatal(string text);
  */
 void _debug(string filename, int line, int level, string text);
 #endif
+
+template<typename... T>
+void writeln(T...args){
+	_writeln( stringutils::text(args...) );
+}
+
+template<typename... T>
+void writefln(const string& formatstring, T...args){
+	_writeln( stringutils::textf(formatstring, args...) );
+}
+
+template<typename... T>
+void writeln(std::ostream& stream, T...args){
+	_writeln( stream, stringutils::text(args...) );
+}
+
+template<typename... T>
+void writefln(std::ostream& stream, const string& formatstring, T...args){
+	_writeln( stream, stringutils::textf(formatstring, args...) );
+}
 
 template<typename... T>
 void note(int level, T...args){

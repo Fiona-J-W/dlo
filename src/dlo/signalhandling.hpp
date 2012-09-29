@@ -33,8 +33,7 @@ public:
 	 * @throws std::invalid_argument if a given signals number cannot be stored
 	 *         in sig_atomic_t or is smaller than 1
 	 */
-	static void init(std::vector<unsigned int> sigs 
-		= std::vector<unsigned int>{SIGINT, SIGTERM});
+	static void init(std::vector<unsigned int> sigs = {SIGINT, SIGTERM});
 	
 	
 	/**

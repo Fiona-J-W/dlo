@@ -68,6 +68,14 @@ void set_debug_level(int d){
 	impl::debug_level=d;
 }
 
+void _writeln(string text){
+	print_and_log(text);
+}
+
+void _writeln(std::ostream& stream, string text){
+	stream << text << endl;
+}
+
 void _note(int level, string text){
 	if(level<=impl::verbose_level){
 		if(level){

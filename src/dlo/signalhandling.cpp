@@ -50,7 +50,7 @@ unsigned int signalhandling::reset(){
 void signalhandling::check(){
 	sig_atomic_t sig = signalhandling::signal;
 	if(sig){
-		throw signal_exception( stringutils::text("cought signal #", sig), sig );
+		throw signal_exception( stringutils::text("caught signal #", sig), sig );
 	}
 }
 

@@ -68,6 +68,42 @@ inline void set_debug_level(int){}
  */
 void set_verbosity(int level);
 
+/**
+ * Write a message to stdout.
+ * @param args the args that will be converted to a string and then concatenated to 
+ *             form the message, that will be printed
+ */
+template<typename... T>
+void writeln(T...args);
+
+/**
+ * Write a message to stdout.
+ * @param formatstring a string that describes how the message should be build and 
+ *                     uses the other args to build the final text.
+ * @param args the args that will be converted to a string
+ */
+template<typename... T>
+void writefln(const string& formatstring, T...args);
+
+
+/**
+ * Write a message to a stream.
+ * @param stream the outputstream, that the message will be printed to.
+ * @param args the args that will be converted to a string and then concatenated to 
+ *             form the message, that will be printed
+ */
+template<typename... T>
+void writeln(std::ostream& stream, T...args);
+
+/**
+ * Write a message to a stream.
+ * @param stream the outputstream, that the message will be printed to.
+ * @param formatstring a string that describes how the message should be build and 
+ *                     uses the other args to build the final text.
+ * @param args the args that will be converted to a string
+ */
+template<typename... T>
+void writefln(std::ostream& stream, const string& formatstring, T...args);
 
 /**
  * Print a note with the given urgency-level.
