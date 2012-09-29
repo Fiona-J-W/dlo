@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <utility>
 #include <stdexcept>
 
@@ -17,7 +17,7 @@ namespace dlo{
  * @param sections enable or disable the use of sections; the values in a 
  *   section can be accessed via "section::key"
  */
-std::map<std::string, std::string> readConfigFile(std::string filename, 
+std::unordered_map<std::string, std::string> readConfigFile(std::string filename, 
 	bool sections=true);
 
 /**
@@ -73,8 +73,8 @@ class settings{
 		/**
 		 * static cache for all read settings
 		 */
-		static std::map<std::string, 
-			std::map<std::string,std::string> > globalSettings;
+		static std::unordered_map<std::string, 
+			std::unordered_map<std::string,std::string> > globalSettings;
 };
 
 /**

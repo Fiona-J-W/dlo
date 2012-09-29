@@ -3,11 +3,12 @@
 
 #include <vector>
 #include <csignal>
+#include <stdexcept>
 
 namespace dlo{
 
 /**
- * This class bundles everythin you need for signalhandling.
+ * This class bundles everything you need for signalhandling.
  * 
  * This class is static.
  * 
@@ -44,14 +45,22 @@ public:
 	/**
 	 * reset the saved signal to 0. 
 	 * 
-	 * As it limits to sabotage to ignore signals, don't use this unless you 
-	 * have very good reasons to do so. 
+	 * Be carefull with this: If you don't have very good reasons to use this
+	 * function, don't use it.
 	 * 
 	 * @returns the value of signalhandling::signal before setting it to zero.
 	 *          WARNING: this value might be outdated, if a signal appears
 	 *          between copying the value and reseting signalhandling::signal.
 	 */
 	static unsigned int reset();
+	
+	/**
+	 * check if signalhandling::signal is set and throw a signal_exception if this 
+	 * is the case; otherwise do nothing.
+	 * @throws signal_exception if signalhandling::signal is set to another value 
+	 *                          than zero.
+	 */
+	static void check();
 	
 private:
 	
@@ -73,6 +82,31 @@ private:
 	 * a signal
 	 */
 	static struct sigaction handler_struct;
+};
+
+
+
+/**
+ * Exception that indicates that a signal got caught.
+ */
+class signal_exception: public std::runtime_error{
+public:
+	/**
+	 * The ctor takes the number of the signal as an additional argument
+	 * @param what_arg a short message
+	 * @param sig_num the number of the signal
+	 */
+	signal_exception(const std::string& what_arg, int sig_num);
+	
+	/**
+	 * Get the number of the signal.
+	 */
+	int sig_num();
+private:
+	/**
+	 * the number of the signal.
+	 */
+	int _sig_num;
 };
 
 } //namespace ldo

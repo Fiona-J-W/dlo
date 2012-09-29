@@ -15,15 +15,15 @@ using namespace stringutils;
 
 //put the static member here:
 std::string settings::app_name = "";
-map<string,map<string,string> > settings::globalSettings;
+unordered_map<string,unordered_map<string,string> > settings::globalSettings;
 
 
-map<string, string> readConfigFile(std::string filename, bool sections){
+unordered_map<string, string> readConfigFile(std::string filename, bool sections){
 	ifstream file(filename.c_str());
 	if(! file.is_open()){
 		throw runtime_error("readConfigFile(): can't open file");
 	}
-	map<string, string> data;
+	unordered_map<string, string> data;
 	string line;
 	string section="";
 	pair<string,string> tmp;

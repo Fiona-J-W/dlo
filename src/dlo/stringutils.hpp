@@ -8,6 +8,13 @@
 #include <sstream>
 
 namespace dlo{
+
+/**
+ * This namespace provides some basic stringhandling functions.
+ * 
+ * As this is such a common task in c++, they will be put into a
+ * seperate namespace to prevent conflicts with other imlementations.
+ */
 namespace stringutils{
 	
 using std::vector;

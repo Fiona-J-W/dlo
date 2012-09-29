@@ -30,15 +30,18 @@ int set_logfile(const string& filename);
  * @param level debuglevel (lower means less important)
  * @param ... parameters that will be converted to a string and printed
  */
-#define debug(level, ...) ::dlo::_debug( __FILE__, __LINE__, (level), ::dlo::stringutils::text(__VA_ARGS__) )
+#define debug(level, ...) \
+	dlo::_debug( __FILE__, __LINE__, (level), dlo::stringutils::text(__VA_ARGS__) )
 
 /**
  * Print a debugmessage; this won't do anything in release-builds.
  * @param level debuglevel (lower means less important)
- * @param ... the first parameter is a formatstring that will, 
- *            together with the rest, create the message
+ * @param formatstring a string that describes how the message should be build and 
+ *                     uses the other args to build the final text.
+ * @param ... the args that will be converted to a string
  */
-#define debugf(level, ...) ::dlo::_debug( __FILE__, __LINE__, (level), ::dlo::stringutils::textf(__VA_ARGS__) )
+#define debugf(level, formatstring, ...) \
+	dlo::_debug( __FILE__, __LINE__, (level), dlo::stringutils::textf((formatstring), __VA_ARGS__) )
 
 /**
  * Set the debug-level: only debug-messages with a level higher that it will be processed.
@@ -50,7 +53,7 @@ void set_debug_level(int level);
 #else // not DEBUG-mode
 // these declarations are just here to enable compilation:
 #define debug(level, ...)
-#define debugf(level, ...)
+#define debugf(level, formatstring, ...)
 
 // let's hope the compiler will really inline this; 
 // otherwise there will be ugly linker-errors (seems
@@ -154,14 +157,14 @@ string get_timestamp();
 
 
 /**
- * disable printing to stdout from all printfunctions of this unit.
+ * Disable or enable printing to stdout from all printfunctions of dlo.
  * @param quiet true = disable printing, false = enable
  */
 void set_stdout_quiet(bool quiet = true);
 
 
 /**
- * disable printing to stderr from all printfunctions of this unit.
+ * Disable or enable printing to stderr from all printfunctions of dlo.
  * @param quiet true = disable printing, false = enable
  */
 void set_stderr_quiet(bool quiet = true);

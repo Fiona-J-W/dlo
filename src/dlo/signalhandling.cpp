@@ -1,6 +1,6 @@
-
 #include "signalhandling.hpp"
 
+#include "stringutils.hpp"
 
 #include <stdexcept>
 #include <string>
@@ -47,8 +47,26 @@ unsigned int signalhandling::reset(){
 	return returnval;
 }
 
+void signalhandling::check(){
+	sig_atomic_t sig = signalhandling::signal;
+	if(sig){
+		throw signal_exception( stringutils::text("cought signal #", sig), sig );
+	}
+}
+
 void signal_handler(int signal){
 	signalhandling::signal = signal;
 }
+
+
+signal_exception::signal_exception(const std::string& what_arg, int sig_num):
+	std::runtime_error(what_arg),
+	_sig_num(sig_num){}
+
+int signal_exception::sig_num(){
+	return _sig_num;
+}
+
+	
 
 } //namespace dlo
