@@ -15,6 +15,7 @@ int main(int argc, char **argv){
 		debugf(1, "some debugmessage with data: %s and %s", 1, 2);
 		dlo::note(0, "some note");
 		dlo::notef(1, "some other, %s, note", "formated");
+		dlo::note(0,"and now let's try:\na multiline\n\noutput");
 		dlo::writeln(std::cout, "write directly to a stream");
 		dlo::warn("And now: commit suicide!!!");
 		dlo::fatalf("Yeah!!!!", ' ');

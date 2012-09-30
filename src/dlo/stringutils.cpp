@@ -131,5 +131,28 @@ string _textf_impl(const std::vector<string>& strings){
 	return resultstream.str();
 }
 
+
+std::string prefix_and_align(const std::string& prefix, const std::string& text){
+	stringstream textstream(text);
+	string tmp;
+	string returnstring;
+	getline(textstream, tmp);
+	returnstring = prefix + tmp;
+	if(!textstream.eof()){
+		auto prefix_size = prefix.length();
+		string alignstr;
+		for( decltype(prefix_size) i = 0; i <  prefix_size; ++i ){
+			alignstr += ' ';
+		}
+		while( getline(textstream, tmp) ){
+			returnstring += "\n" + alignstr + tmp;
+		}
+	}
+	if(text.back() == '\n'){
+		returnstring += '\n';
+	}
+	return returnstring;
+}
+
 } //namespace stringutils
 } //namespace dlo

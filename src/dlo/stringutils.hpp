@@ -82,6 +82,14 @@ std::pair<std::string,std::string> split_once(std::string str,
  */
 std::string decode(std::string str);
 
+/**
+ * Prefix the first line of a given text with a string and align
+ * all further lines with whitespace
+ * @param prefix the prefix for the first line
+ * @param text the multiline text
+ */
+std::string prefix_and_align(const std::string& prefix, const std::string& text);
+
 } //namespace stringutils
 } //namespace dlo
 

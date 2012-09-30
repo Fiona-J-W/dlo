@@ -221,6 +221,18 @@ void set_stderr_quiet(bool quiet = true);
  */
 void print_and_log(const string& msg, bool normal = true);
 
+/**
+ * Write a prefixed message to stdout or stderr and to the log.
+ * 
+ * @param prefix the prefix that will be written in the front of the
+ *               first line; all following lines of msg will be alligned
+ *               correctly.
+ * @param msg the message that will be printed
+ * @param normal whether the message is normal behaviour and should be 
+ * printed to stdout or an error to be printed to stderr
+ */
+void print_and_log(const string& prefix, const string& msg, bool normal = true);
+
 } //dlo namespace
 
 //include the template-implementations:

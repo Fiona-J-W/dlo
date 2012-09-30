@@ -58,9 +58,8 @@ int set_logfile(const string& filename){
 
 void _debug(string filename, int line, int level, string text){
 	if(level<=impl::debug_level){
-		string str = "DEBUG(" + to_string(level) + ") [“"  + filename + "”, " + to_string(line) + "]: "
-			+ text;
-		print_and_log(str);
+		string metadata = "DEBUG(" + to_string(level) + ") [“"  + filename + "”, " + to_string(line) + "]: ";
+		print_and_log(metadata, text);
 	}
 }
 
@@ -79,27 +78,27 @@ void _writeln(std::ostream& stream, string text){
 void _note(int level, string text){
 	if(level<=impl::verbose_level){
 		if(level){
-			print_and_log("NOTE(" + to_string(level) + "): " + text);
+			print_and_log("NOTE(" + to_string(level) + "): ", text);
 		}
 		else{
-			print_and_log("NOTE: " + text);
+			print_and_log("NOTE: ", text);
 		}
 	}
 }
 
 void _warn(string text){
-	print_and_log("WARNING: " + text, false);
+	print_and_log("WARNING: ", text, false);
 }
 
 void _error(string text){
-	print_and_log("ERROR: " + text, false);
+	print_and_log("ERROR: ", text, false);
 }
 
 class fatal_error_exception{
 };
 
 void _fatal(string text){
-	print_and_log("FATAL: " + text, false);
+	print_and_log("FATAL: ", text, false);
 	throw fatal_error_exception();
 }
 
@@ -115,6 +114,9 @@ string get_timestamp(){
 	return returnstr;
 }
 
+void print_and_log(const string& prefix, const string& msg, bool normal){
+	print_and_log( stringutils::prefix_and_align(prefix, msg), normal);
+}
 void print_and_log(const string& msg, bool normal){
 	if( normal ){
 		if(!impl::stdout_quiet){
@@ -127,7 +129,7 @@ void print_and_log(const string& msg, bool normal){
 		}
 	}
 	if( impl::logfile ){
-		string str = "[" + get_timestamp() + "] " + msg + '\n';
+		string str = stringutils::prefix_and_align( "[" + get_timestamp() + "] ", msg + '\n');
 		if( write( impl::logfile , str.c_str(), str.size()) == -1 ){
 			cerr << "Error: Could not write to logfile, Errorcode:" << errno << endl;
 		}
