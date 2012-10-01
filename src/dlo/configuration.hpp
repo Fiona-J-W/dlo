@@ -78,7 +78,7 @@ class settings{
 };
 
 /**
- * Exception, that indicates, that the name of the program has not been set correctly.
+ * Exception that indicates, that the name of the program has not been set correctly.
  */
 class uninitialised_config_error: public std::logic_error{
 	/**

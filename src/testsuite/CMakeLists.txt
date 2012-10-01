@@ -12,3 +12,16 @@ target_link_libraries( sig_test
 	dlo
 )
 
+add_executable( string_test
+	string_test.cpp
+)
+target_link_libraries( string_test
+	dlo
+)
+
+add_executable( conf_test
+	conf_test.cpp
+)
+target_link_libraries( conf_test
+	dlo
+)

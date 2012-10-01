@@ -44,13 +44,15 @@ void writefln(const string& formatstring, T...args){
 }
 
 template<typename... T>
-void writeln(std::ostream& stream, T...args){
-	_writeln( stream, stringutils::text(args...) );
+void swriteln(std::ostream& stream, T...args){
+	//_writeln( stream, stringutils::text(args...) );
+	stream << stringutils::text(args...) << std::endl;
 }
 
 template<typename... T>
-void writefln(std::ostream& stream, const string& formatstring, T...args){
-	_writeln( stream, stringutils::textf(formatstring, args...) );
+void swritefln(std::ostream& stream, const string& formatstring, T...args){
+	//_writeln( stream, stringutils::textf(formatstring, args...) );
+	stream << stringutils::textf(formatstring, args...) << std::endl;
 }
 
 template<typename... T>

@@ -14,6 +14,8 @@ else()
 	set( CMAKE_CXX_FLAGS "-std=c++11 -O3 -Wall -Wextra -pedantic -Werror" )
 endif()
 
+option(BUILD_TESTS "build-tests" OFF)
+
 #et(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 

@@ -97,7 +97,7 @@ void writefln(const string& formatstring, T...args);
  *             form the message, that will be printed
  */
 template<typename... T>
-void writeln(std::ostream& stream, T...args);
+void swriteln(std::ostream& stream, T...args);
 
 /**
  * Write a message to a stream.
@@ -110,7 +110,7 @@ void writeln(std::ostream& stream, T...args);
  * @param args the args that will be converted to a string
  */
 template<typename... T>
-void writefln(std::ostream& stream, const string& formatstring, T...args);
+void swritefln(std::ostream& stream, const string& formatstring, T...args);
 
 /**
  * Print a note with the given urgency-level.
