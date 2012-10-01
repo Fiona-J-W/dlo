@@ -38,15 +38,16 @@ void writeln(T...args){
 	_writeln( stringutils::text(args...) );
 }
 
-template<typename... T>
-void writefln(const string& formatstring, T...args){
-	_writeln( stringutils::textf(formatstring, args...) );
+template<typename T>
+void swriteln(std::ostream& stream,T arg){
+	stream << arg << std::endl;
 }
 
-template<typename... T>
-void swriteln(std::ostream& stream, T...args){
-	//_writeln( stream, stringutils::text(args...) );
-	stream << stringutils::text(args...) << std::endl;
+
+template<typename T1, typename... T2>
+void swriteln(std::ostream& stream,T1 arg, T2...args){
+	stream << arg;
+	swriteln(stream, args...);
 }
 
 template<typename... T>
