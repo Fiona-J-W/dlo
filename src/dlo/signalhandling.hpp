@@ -20,12 +20,13 @@ namespace dlo{
  * 
  */
 class signalhandling{
-public:
+	//as doxygen on debian doesn't understand ctor=delete, make it private:
 	/**
 	 * We don't need a constructor, so let's delete it.
 	 */
 	signalhandling() = delete;
 	
+public:
 	/**
 	 * init function for signalhandling. This has to be called early.
 	 * @param sigs vector of the signals, that should be handled (defaults to 

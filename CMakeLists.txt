@@ -15,8 +15,9 @@ else()
 endif()
 
 option(BUILD_TESTS "build-tests" OFF)
+option(BUILD_SHARED "build-shared" ON)
 
-#et(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
 add_subdirectory(src)

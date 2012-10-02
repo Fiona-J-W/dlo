@@ -52,7 +52,6 @@ void swriteln(std::ostream& stream,T1 arg, T2...args){
 
 template<typename... T>
 void swritefln(std::ostream& stream, const string& formatstring, T...args){
-	//_writeln( stream, stringutils::textf(formatstring, args...) );
 	stream << stringutils::textf(formatstring, args...) << std::endl;
 }
 
