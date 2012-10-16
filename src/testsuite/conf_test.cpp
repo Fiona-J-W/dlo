@@ -18,9 +18,6 @@ int main(){
 	
 	unsigned int fails = 0;
 	
-	set_debug_level(10);
-	debug(0, "test");
-	
 	note(0, "testing whether an uninitialised state throws...");
 	try{
 		settings S;

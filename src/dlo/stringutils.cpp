@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <cstdlib>
+#include <cassert>
 
 namespace dlo{
 namespace stringutils{
@@ -91,11 +92,12 @@ string decode(string str){
 }
 
 string _textf_impl(const std::vector<string>& strings){
-	if(strings.empty()){
-		throw std::invalid_argument("no formatstring");
-	}
-	stringstream resultstream;
-	stringstream formatstream(strings[0]);
+	//this is an internal function, so this can be done via an assert:
+	//(if people use it from outside without care it is THEIR fault, if this explodes)
+	assert(!strings.empty());
+	
+	ostringstream resultstream;
+	istringstream formatstream(strings[0]);
 	string tmp;
 	unsigned int unspecified_inserts = 1;
 	while(getline(formatstream, tmp, '%')){

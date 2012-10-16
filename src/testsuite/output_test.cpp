@@ -19,8 +19,9 @@ int main(int argc, char **argv){
 		dlo::swriteln(std::cout, "write directly to a stream");
 		dlo::warn("And now: commit suicide!!!");
 		dlo::fatalf("Yeah!!!!", ' ');
+		return 1;
 	}
 	catch(...){
-		return -1;
+		return 0;
 	}
 }

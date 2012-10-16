@@ -36,7 +36,6 @@ public:
 	 */
 	static void init(std::vector<unsigned int> sigs = {SIGINT, SIGTERM});
 	
-	
 	/**
 	 * query for the last signal; this will return 0 if no signal has been caught.
 	 */

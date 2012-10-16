@@ -8,7 +8,7 @@ int main(){
 	using dlo::error;
 	using dlo::errorf;
 	
-	uint fails = 0;
+	unsigned int fails = 0;
 	
 	notef(0, "testing dlo::stringutils::%s()...","text");
 	if(text(1,2.5,"foo",'b','a','r') == "12.5foobar"){
