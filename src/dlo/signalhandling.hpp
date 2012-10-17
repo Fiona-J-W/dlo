@@ -38,21 +38,19 @@ public:
 	 * init function for signalhandling. This has to be called early.
 	 * @param sigs vector of the signals, that should be handled (defaults to 
 	 *        SIGINT and SIGTERM)
-	 * @throws std::invalid_argument if a given signals number cannot be stored
-	 *         in an unsigned int
 	 */
-	static void init(std::vector<unsigned int> sigs = {SIGINT, SIGTERM});
+	static void init(std::vector<int> sigs = {SIGINT, SIGTERM});
 	
 	/**
 	 * query for the last signal; this will return 0 if no signal has been caught.
 	 */
-	static unsigned int get_last_signal();
+	static int get_last_signal();
 	
 	/**
 	 * reset the saved signal to 0. 
 	 * @returns the value of signalhandling::signal before setting it to zero.
 	 */
-	static unsigned int reset();
+	static int reset();
 	
 	/**
 	 * check if signalhandling::signal is set and throw a signal_exception if this 
