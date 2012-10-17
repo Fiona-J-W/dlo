@@ -46,7 +46,7 @@ unordered_map<string, string> readConfigFile(std::string filename, bool sections
 			tmp = split_once(line,"=");
 		}
 		catch(const invalid_argument &e){
-			errorf("invalid line in configfile (%s, %s): “%s”", 
+			errorf("invalid line in configfile (%s, %s): No delimiter (“%s”)", 
 				filename, lineNumber, line);
 			continue;
 		}
@@ -70,7 +70,7 @@ unordered_map<string, string> readConfigFile(std::string filename, bool sections
 				value = decode( value );
 			}
 			catch(invalid_argument& e){
-			errorf("invalid line in configfile (%s, %s): “%s”", 
+			errorf("invalid line in configfile (%s, %s): Cannot decode string (“%s”)", 
 				filename, lineNumber, line);
 				continue;
 			}
@@ -82,7 +82,7 @@ unordered_map<string, string> readConfigFile(std::string filename, bool sections
 			data[ section+"::"+strip(tmp.first) ] = value;
 		}
 	}
-	//now see, whether some references can be resolved:
+	//now see whether some references can be resolved:
 	bool foundReference = false;
 	do{
 		foundReference = false;

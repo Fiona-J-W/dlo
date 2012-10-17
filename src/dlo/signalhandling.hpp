@@ -4,6 +4,13 @@
 #include <vector>
 #include <csignal>
 #include <stdexcept>
+#include <atomic>
+
+
+// This should work almost everywhere:
+#if ATOMIC_INT_LOCK_FREE != 2
+	#error "Your platform doesn't support a lockfree atomic<int>."
+#endif
 
 namespace dlo{
 
@@ -32,7 +39,7 @@ public:
 	 * @param sigs vector of the signals, that should be handled (defaults to 
 	 *        SIGINT and SIGTERM)
 	 * @throws std::invalid_argument if a given signals number cannot be stored
-	 *         in sig_atomic_t or is smaller than 1
+	 *         in an unsigned int
 	 */
 	static void init(std::vector<unsigned int> sigs = {SIGINT, SIGTERM});
 	
@@ -43,13 +50,7 @@ public:
 	
 	/**
 	 * reset the saved signal to 0. 
-	 * 
-	 * Be carefull with this: If you don't have very good reasons to use this
-	 * function, don't use it.
-	 * 
 	 * @returns the value of signalhandling::signal before setting it to zero.
-	 *          WARNING: this value might be outdated, if a signal appears
-	 *          between copying the value and reseting signalhandling::signal.
 	 */
 	static unsigned int reset();
 	
@@ -74,7 +75,7 @@ private:
 	/**
 	 * number of the last recieved signal; init will set this to 0.
 	 */
-	static sig_atomic_t signal;
+	static std::atomic_uint signal;
 	
 	/**
 	 * struct that contains the information, what should be done after recieving

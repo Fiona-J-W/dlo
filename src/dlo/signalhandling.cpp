@@ -5,13 +5,14 @@
 #include <stdexcept>
 #include <string>
 #include <cstdint>
+#include <climits>
 
 namespace dlo{
 
 using std::vector;
 
 //put the instances of the static vars here:
-sig_atomic_t signalhandling::signal;
+std::atomic_uint signalhandling::signal;
 struct sigaction signalhandling::handler_struct;
 
 //declare the actual signalhandler:
@@ -19,16 +20,12 @@ void signal_handler(int signal);
 
 
 void signalhandling::init(vector<unsigned int> sigs){
-	signal = 0;
+	signal.store( 0 );
 	handler_struct.sa_handler = signal_handler;
 	for(auto it = sigs.begin(); it != sigs.end(); ++it){
-		if(*it > SIG_ATOMIC_MAX){
+		if(*it > UINT_MAX){
 			throw std::invalid_argument("the number of a given signal"
-				"is to big, to be saved in a sig_atomic_t");
-		}
-		if(*it < 1){
-			throw std::invalid_argument("the number of a given signal"
-				"is to small (<1) to be handled by this class");
+				"is to big, to be saved in an unsigned int.");
 		}
 		sigaction(*it, &handler_struct, NULL);
 	}
@@ -36,26 +33,22 @@ void signalhandling::init(vector<unsigned int> sigs){
 
 
 unsigned int signalhandling::get_last_signal(){
-	return signal;
+	return signal.load();
 }
 
 unsigned int signalhandling::reset(){
-	unsigned int returnval = signalhandling::signal;
-	//a signal might arrive here and destroy everything; this is bad as people
-	//might reset the stuff and believe they broke nothing
-	signalhandling::signal = 0;
-	return returnval;
+	return signal.fetch_and(0);
 }
 
 void signalhandling::check(){
-	sig_atomic_t sig = signalhandling::signal;
+	auto sig = signal.load();
 	if(sig){
 		throw signal_exception( stringutils::text("caught signal #", sig), sig );
 	}
 }
 
 void signal_handler(int signal){
-	signalhandling::signal = signal;
+	signalhandling::signal.store( signal );
 }
 
 
