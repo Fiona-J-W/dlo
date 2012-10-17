@@ -25,7 +25,7 @@ void signalhandling::init(vector<unsigned int> sigs){
 	for(auto it = sigs.begin(); it != sigs.end(); ++it){
 		if(*it > UINT_MAX){
 			throw std::invalid_argument("the number of a given signal"
-				"is to big, to be saved in an unsigned int.");
+				"is to big to be saved in an unsigned int.");
 		}
 		sigaction(*it, &handler_struct, NULL);
 	}
