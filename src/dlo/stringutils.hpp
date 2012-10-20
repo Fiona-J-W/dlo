@@ -16,7 +16,7 @@ namespace dlo{
  * seperate namespace to prevent conflicts with other imlementations.
  */
 namespace stringutils{
-	
+
 using std::vector;
 using std::string;
 using std::stringstream;
@@ -89,6 +89,15 @@ std::string decode(std::string str);
  * @param text the multiline text
  */
 std::string prefix_and_align(const std::string& prefix, const std::string& text);
+
+/**
+ * Get the number of codepoints, that are in str
+ *
+ * WARNING: Keep in mind that this is not necessarily equal to the
+ *          number of glyphs.
+ * @param str the valid utf8-string
+ */
+size_t u8len(const std::string& str);
 
 } //namespace stringutils
 } //namespace dlo

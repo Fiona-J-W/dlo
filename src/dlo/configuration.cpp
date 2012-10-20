@@ -111,11 +111,12 @@ void settings::init(std::string app_name_){
 	app_name = app_name_;
 }
 
-settings::settings(string config){
+settings::settings(string config)
+	: file( config )
+{
 	if(app_name.empty()){
 		throw uninitialised_config_error("The name of the programm was not set properly.");
 	}
-	this->file=config;
 	if(config.empty()){
 		return;
 	}

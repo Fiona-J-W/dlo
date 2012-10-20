@@ -14,6 +14,10 @@
 
 namespace dlo{
 
+extern "C"{
+	void signal_handler(int signal);
+}
+
 /**
  * This class bundles everything you need for signalhandling.
  * 
@@ -22,8 +26,8 @@ namespace dlo{
  * To use it, call the init method with a vector of signals you want to have managed
  * by this class once (as early as possible) in your programm.
  * 
- * After that you have to call the getLastSig method in short intervalls and react 
- * to it in a proper way.
+ * After that you have to call getLastSig() or check() in short intervals and react 
+ * to their output in a proper way.
  * 
  */
 class signalhandling{
@@ -101,6 +105,7 @@ public:
 	 */
 	int sig_num();
 private:
+	
 	/**
 	 * the number of the signal.
 	 */

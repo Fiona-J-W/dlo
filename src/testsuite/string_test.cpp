@@ -79,6 +79,25 @@ int main(){
 		error("failed!");
 	}
 	
+	notef(0, "testing dlo::stringutils::%s() with utf8...","prefix_and_align");
+	if( prefix_and_align(u8"äöüß ","bar\nbaz") == u8"äöüß bar\n     baz"){
+		note(0,"success.");
+	}
+	else{
+		++fails;
+		error("failed!");
+	}
+		
+	notef(0, "testing dlo::stringutils::%s()...","u8len");
+	if( u8len( u8"aäß¿") == 4 ){
+		note(0,"success.");
+	}
+	else{
+		++fails;
+		error("failed!");
+		note(0, "Result was: ", u8len("aäß¿"));
+	}
+	
 	if(fails){
 		errorf("%s tests failed", fails);
 		return 1;

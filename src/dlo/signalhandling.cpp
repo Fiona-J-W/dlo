@@ -16,14 +16,14 @@ std::atomic_uint signalhandling::signal;
 struct sigaction signalhandling::handler_struct;
 
 //declare the actual signalhandler:
-void signal_handler(int signal);
+extern "C" void signal_handler(int signal);
 
 
 void signalhandling::init(vector<int> sigs){
 	signal.store( 0 );
 	handler_struct.sa_handler = signal_handler;
-	for(auto it = sigs.begin(); it != sigs.end(); ++it){
-		sigaction(*it, &handler_struct, NULL);
+	for(auto sig: sigs){
+		sigaction(sig, &handler_struct, NULL);
 	}
 }
 
@@ -43,10 +43,11 @@ void signalhandling::check(){
 	}
 }
 
+extern "C"{
 void signal_handler(int signal){
 	signalhandling::signal.store( signal );
 }
-
+}
 
 signal_exception::signal_exception(const std::string& what_arg, int sig_num):
 	std::runtime_error(what_arg),

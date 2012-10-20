@@ -4,6 +4,7 @@ set(DLO_SOURCES
 	signalhandling.cpp
 	configuration.cpp
 	stringutils.cpp
+	i18n.cpp
 )
 
 if(BUILD_SHARED MATCHES ON)

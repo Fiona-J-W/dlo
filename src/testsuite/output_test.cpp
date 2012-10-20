@@ -13,6 +13,7 @@ int main(int argc, char **argv){
 		dlo::set_verbosity(2);
 		debug(0, "foo ", "bar", " baz ", 3, " ", 4, ' ');
 		debugf(1, "some debugmessage with data: %s and %s", 1, 2);
+		debug(11, "you should not see this");
 		dlo::note(0, "some note");
 		dlo::notef(1, "some other, %s, note", "formated");
 		dlo::note(0,"and now let's try:\na multiline\n\noutput");

@@ -141,7 +141,8 @@ std::string prefix_and_align(const std::string& prefix, const std::string& text)
 	getline(textstream, tmp);
 	returnstring = prefix + tmp;
 	if(!textstream.eof()){
-		auto prefix_size = prefix.length();
+		//keep in mind, that this is not a perfect solution
+		auto prefix_size = u8len( prefix );
 		string alignstr;
 		for( decltype(prefix_size) i = 0; i <  prefix_size; ++i ){
 			alignstr += ' ';
@@ -154,6 +155,19 @@ std::string prefix_and_align(const std::string& prefix, const std::string& text)
 		returnstring += '\n';
 	}
 	return returnstring;
+}
+
+size_t u8len(const std::string& str){
+	size_t returnval = 0;
+	for(const auto c: str){
+		if( (~c) & (1 << 7) ){
+			++returnval;
+		}
+		else if( (c & (1 << 7)) && (c & (1 << 6)) ){
+			++returnval;
+		}
+	}
+	return returnval;
 }
 
 } //namespace stringutils
