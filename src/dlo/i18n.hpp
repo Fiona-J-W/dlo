@@ -5,6 +5,8 @@
 #include <unordered_map>
 
 namespace dlo{
+namespace i18n{
+
 using std::string;
 
 /**
@@ -28,6 +30,6 @@ string i18n(const string& str);
  */
 void set_dict(std::unordered_map<string, string> dict);
 
-} //namespace
+}} //namespaces
 
 #endif // I18N_HPP

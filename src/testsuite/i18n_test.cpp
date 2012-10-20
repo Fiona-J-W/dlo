@@ -5,7 +5,7 @@
 #include <string>
 
 int main(){
-	using dlo::i18n;
+	using namespace dlo::i18n;
 	using dlo::notef;
 	using dlo::note;
 	using dlo::error;
@@ -38,7 +38,7 @@ int main(){
 	};
 		
 	note(0, "trying to set language");
-	dlo::set_dict(dict);
+	set_dict(dict);
 	
 	note(0, "testing dlo::i18n() with dict and word in dict...");
 	if(i18n("foo") == "bar" ){

@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 namespace dlo{
+namespace i18n{
 
 using std::string;
 
@@ -29,4 +30,5 @@ void set_dict(std::unordered_map<string, string> dict){
 	impl::dict = dict;
 }
 
+}
 }
