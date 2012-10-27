@@ -13,7 +13,7 @@ namespace dlo{
 using namespace std;
 using namespace stringutils;
 
-//put the static member here:
+//put the static members here:
 std::string settings::app_name = "";
 unordered_map<string,unordered_map<string,string> > settings::globalSettings;
 

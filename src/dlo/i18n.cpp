@@ -26,7 +26,7 @@ string i18n(const string& str){
 
 void set_lang(string lang);
 
-void set_dict(std::unordered_map<string, string> dict){
+void set_dict(const std::unordered_map<string, string>& dict){
 	impl::dict = dict;
 }
 

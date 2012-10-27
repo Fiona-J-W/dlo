@@ -58,7 +58,7 @@ int set_logfile(const string& filename){
 
 void _debug(string filename, int line, int level, string text){
 	if(level<=impl::debug_level){
-		string metadata = "DEBUG(" + to_string(level) + ") [“"  + filename + "”, " + to_string(line) + "]: ";
+		string metadata = stringutils::textf("DEBUG(%s) [“%s”, %s]: ", level, filename, line);
 		print_and_log(metadata, text);
 	}
 }

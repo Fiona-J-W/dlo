@@ -23,13 +23,6 @@ void _error(string text);
 void _fatal(string text);
 
 #ifdef DEBUG
-/*
- * prints a debugmessage; this is an internal function never call it directly.
- * @param filename sourcefile, that calls the function
- * @param line line of the functioncall
- * @param level the debuglevel
- * @param text the debugmessage
- */
 void _debug(string filename, int line, int level, string text);
 #endif
 

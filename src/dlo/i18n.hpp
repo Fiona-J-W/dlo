@@ -28,7 +28,7 @@ string i18n(const string& str);
  * set the used dictionary.
  * @param dict the new dictionary
  */
-void set_dict(std::unordered_map<string, string> dict);
+void set_dict(const std::unordered_map<string, string>& dict);
 
 }} //namespaces
 

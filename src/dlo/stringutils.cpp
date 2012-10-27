@@ -114,11 +114,11 @@ string _textf_impl(const std::vector<string>& strings){
 				try{
 					resultstream << strings.at(unspecified_inserts);
 					++unspecified_inserts;
+					formatstream.ignore();
 				}
 				catch(std::out_of_range &e){
 					throw std::invalid_argument("invalid formatstring");
 				}
-				formatstream.ignore();
 				break;
 			default:
 				getline(formatstream, tmp, 's');
