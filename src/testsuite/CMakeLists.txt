@@ -26,9 +26,3 @@ target_link_libraries( conf_test
 	dlo
 )
 
-add_executable( i18n_test
-	i18n_test.cpp
-)
-target_link_libraries( i18n_test
-	dlo
-)
