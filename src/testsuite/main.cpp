@@ -10,11 +10,13 @@ int main(){
 	
 	unsigned int total_fails = 0;
 	
-	writeln("\nTesting the stringutils\n");
+	dlo::set_verbosity(1);
+	
+	writeln("Testing the stringutils");
 	total_fails += string_test();
-	writeln("\nTesting the signalhandling-lib\n");
+	writeln("\nTesting the signalhandling-lib");
 	total_fails += sig_test();
-	writeln("\nTesting the config-lib\n");
+	writeln("\nTesting the config-lib");
 	total_fails += conf_test();
 	
 	if(!total_fails){

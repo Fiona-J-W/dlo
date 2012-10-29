@@ -8,53 +8,53 @@ int sig_test(){
 	signalhandling::init();
 	unsigned int fails = 0;
 	
-	note(0,"This test assumes that it won't recieve signals by other processes.");
+	note(1,"This test assumes that it won't recieve signals by other processes.");
 	
-	note(0,"testing dlo::signalhandling::get_last_signal() without signal...");
+	note(1,"testing dlo::signalhandling::get_last_signal() without signal...");
 	if(signalhandling::get_last_signal() == 0){
-		note(0,"success");
+		note(1,"success");
 	}
 	else{
 		++fails;
 		error("failed");
 	}
 	
-	note(0,"testing dlo::signalhandling::check() without signal...");
+	note(1,"testing dlo::signalhandling::check() without signal...");
 	try{
 		dlo::signalhandling::check();
-		note(0,"success");
+		note(1,"success");
 	}
 	catch(dlo::signal_exception &e){
 		++fails;
 		error("failed");
 	}
 	
-	note(0, "sending SIGINT to testprocess");
+	note(1, "sending SIGINT to testprocess");
 	raise(SIGTERM);
 	
-	note(0,"testing dlo::signalhandling::get_last_signal() with SIGTERM...");
+	note(1,"testing dlo::signalhandling::get_last_signal() with SIGTERM...");
 	if(signalhandling::get_last_signal() == SIGTERM){
-		note(0, "success");
+		note(1, "success");
 	}
 	else{
 		++fails;
 		error("failed");
 	}
 	
-	note(0,"testing dlo::signalhandling::check() with SIGTERM...");
+	note(1,"testing dlo::signalhandling::check() with SIGTERM...");
 	try{
 		dlo::signalhandling::check();
 		++fails;
 		error("failed");
 	}
 	catch(dlo::signal_exception &e){
-		note(0,"success");
+		note(1,"success");
 	}
 	
-	note(0,"testing dlo::signalhandling::reset()...");
+	note(1,"testing dlo::signalhandling::reset()...");
 	if(signalhandling::reset() == SIGTERM){
 		if(signalhandling::get_last_signal() == 0){
-			note(0,"success");
+			note(1,"success");
 		}
 		else{
 			++fails;

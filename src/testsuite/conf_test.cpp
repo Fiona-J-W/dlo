@@ -20,14 +20,14 @@ int conf_test(){
 	
 	unsigned int fails = 0;
 	
-	note(0, "testing whether an uninitialised state throws...");
+	note(1, "testing whether an uninitialised state throws...");
 	try{
 		settings S;
 		error("failed");
 		++fails;
 	}
 	catch(uninitialised_config_error &e){
-		note(0,"success");
+		note(1,"success");
 	}
 	settings::init("conftest");
 	mkdir("conftest", 0777);
@@ -44,27 +44,27 @@ int conf_test(){
 	
 	settings S("test");
 	
-	note(0,"testing common key=value...");
+	note(1,"testing common key=value...");
 	if(S["foo"] == "bar"){
-		note(0,"success.");
+		note(1,"success.");
 	}
 	else{
 		++fails;
 		error("failed!");
 	}
 	
-	note(0, "testing reference resolving...");
+	note(1, "testing reference resolving...");
 	if(S["reference"] == "bar"){
-		note(0,"success.");
+		note(1,"success.");
 	}
 	else{
 		++fails;
 		error("failed!");
 	}
 	
-	note(0, "testing sections...");
+	note(1, "testing sections...");
 	if(S["section::foo"] == "baz"){
-		note(0,"success.");
+		note(1,"success.");
 	}
 	else{
 		++fails;
