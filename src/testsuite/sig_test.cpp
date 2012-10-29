@@ -3,7 +3,7 @@
 #include "../dlo/signalhandling.hpp"
 
 
-int main(){
+int sig_test(){
 	using namespace dlo;
 	signalhandling::init();
 	unsigned int fails = 0;
@@ -78,4 +78,6 @@ int main(){
 	else{
 		note(0, "all tests were succesfull");
 	}
+	
+	return fails;
 }

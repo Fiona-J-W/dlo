@@ -1,7 +1,9 @@
+#include "string_test.hpp"
+
 #include "../dlo/output.hpp"
 #include "../dlo/stringutils.hpp"
 
-int main(){
+int string_test(){
 	using namespace dlo::stringutils;
 	using dlo::notef;
 	using dlo::note;
@@ -106,4 +108,5 @@ int main(){
 		note(0,"all tests were succesfull");
 		return 0;
 	}
+	return fails;
 }

@@ -5,24 +5,12 @@ target_link_libraries( output_test
 	dlo
 )
 
-add_executable( sig_test
+add_executable( testsuite
+	main.cpp
 	sig_test.cpp
-)
-target_link_libraries( sig_test
-	dlo
-)
-
-add_executable( string_test
+	conf_test.cpp
 	string_test.cpp
 )
-target_link_libraries( string_test
+target_link_libraries( testsuite
 	dlo
 )
-
-add_executable( conf_test
-	conf_test.cpp
-)
-target_link_libraries( conf_test
-	dlo
-)
-

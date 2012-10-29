@@ -1,3 +1,5 @@
+#include "string_test.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
@@ -8,10 +10,10 @@
 #include "../dlo/configuration.hpp"
 #include "../dlo/output.hpp"
 
-using namespace dlo;
 
 
-int main(){
+int conf_test(){
+	using namespace dlo;
 	//we need a defined, local_state:
 	auto old_config_home = getenv("XDG_CONFIG_HOME");
 	setenv("XDG_CONFIG_HOME",".",1);
@@ -83,4 +85,6 @@ int main(){
 	
 	//set the environment back:
 	setenv("XDG_CONFIG_HOME",old_config_home,1);
+	
+	return fails;
 }
