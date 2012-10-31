@@ -11,7 +11,6 @@
 #include <stdexcept>
 #include <ctime>
 
-#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -30,6 +29,21 @@ namespace impl{
 	static int debug_level = 0;
 	static bool stdout_quiet = false;
 	static bool stderr_quiet = false;
+	static std::function<int(int)> log_close_function = close;
+}
+
+/**
+ * internal function that closes the logfile and checks the states
+ */
+void close_logfile(){
+	if(impl::logfile){
+		//do this with a temp var to prevent race-conditions:
+		volatile int tmp = impl::logfile;
+		impl::logfile = 0;
+		if(impl::log_close_function){
+			impl::log_close_function( tmp );
+		}
+	}
 }
 
 void set_verbosity(int level){
@@ -37,13 +51,9 @@ void set_verbosity(int level){
 }
 
 int set_logfile(const string& filename){
-	if(impl::logfile){
-		//do this with a temp var to prevent race-conditions:
-		volatile int tmp = impl::logfile;
-		impl::logfile = 0;
-		close(tmp);
-	}
+	close_logfile();
 	if(!filename.empty()){
+		impl::log_close_function = close;
 		if( (impl::logfile = open(filename.c_str(),O_WRONLY | O_CREAT | O_APPEND, 0666)) == -1){
 			impl::logfile = 0;
 			error("Could not open logfile.");
@@ -55,6 +65,13 @@ int set_logfile(const string& filename){
 	}
 	return 0;
 }
+
+void set_logfile(int fd, std::function<int(int)> close_fun){
+	close_logfile();
+	impl::log_close_function = close_fun;
+	impl::logfile = fd;
+}
+
 
 void _debug(string filename, int line, int level, string text){
 	if(level<=impl::debug_level){

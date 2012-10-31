@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <functional>
+
+#include <unistd.h>
 
 #include "stringutils.hpp"
 
@@ -22,6 +25,15 @@ using std::vector;
  * @returns 0 if the logfile could be opened for writing, otherwise -1
  */
 int set_logfile(const string& filename);
+
+/**
+ * set the logfile
+ *
+ * @param fd the filedescriptor to the logfile
+ * @param close_fun the function that will be used to close the fd, if it is replaced;
+ *                  if it is NULL, no function will be executed
+ */
+void set_logfile(int fd, std::function<int(int)> close_fun = close);
 
 #ifdef DEBUG
 

@@ -16,8 +16,8 @@ int main(int argc, char **argv){
 		debugf(0, "debugf(1, str, arg=%s)", "‘a’");
 		debugf(1, "debugf(2, str, arg=%s)", "‘a’");
 		debugf(2, "debugf(3, str, arg=%s) you should not see this", "‘a’");
-		debug(0, "debug(1, str, arg=", "‘a’", "\"");
-		debug(1, "debug(2, str, arg=", "‘a’", "\"");
+		debug(0, "debug(1, str, arg=", "‘a’", ")");
+		debug(1, "debug(2, str, arg=", "‘a’", ")");
 		debug(2, "you should not see this");
 		
 		std::cout << "\ntesting note() and notef(); you should see 4 lines:" << std::endl;
