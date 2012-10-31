@@ -65,13 +65,9 @@ void set_debug_level(int level);
 
 #else // not DEBUG-mode
 // these declarations are just here to enable compilation:
-#define debug(level, ...) do{}while(false)
-#define debugf(level, formatstring, ...) do{}while(false)
-
-// let's hope the compiler will really inline this; 
-// otherwise there will be ugly linker-errors (seems
-// to work with gcc):
-inline void set_debug_level(int){}
+#define debug(level, ...)                 do{}while(false)
+#define debugf(level, formatstring, ...)  do{}while(false)
+#define set_debug_level(level)            do{}while(false)
 #endif
 
 
