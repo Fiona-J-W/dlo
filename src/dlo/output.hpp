@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <functional>
+#include <iostream>
 
 #include <unistd.h>
 
@@ -29,7 +30,7 @@ int set_logfile(const string& filename);
 /**
  * set the logfile
  *
- * @param fd the filedescriptor to the logfile
+ * @param fd the filedescriptor to the logfile; -1 to disable loging
  * @param close_fun the function that will be used to close the fd, if it is replaced;
  *                  if it is NULL, no function will be executed
  */
@@ -206,19 +207,23 @@ void fatalf(const string& formatstring, T... args);
  */
 string get_timestamp();
 
+/**
+ * Set the normal printing function to something else. This is mainly for testing the 
+ * library itself, but may be used for other things to.
+ * 
+ * @param fun the new printing-function
+ */
+void set_stdout_fun(std::function<void(const string&)> fun 
+	= [](const string& str){std::cout << str << std::endl;});
 
 /**
- * Disable or enable printing to stdout from all printfunctions of dlo.
- * @param quiet true = disable printing, false = enable
+ * Set the error printing function to something else. This is mainly for testing the 
+ * library itself, but may be used for other things to.
+ * 
+ * @param fun the new printing-function
  */
-void set_stdout_quiet(bool quiet = true);
-
-
-/**
- * Disable or enable printing to stderr from all printfunctions of dlo.
- * @param quiet true = disable printing, false = enable
- */
-void set_stderr_quiet(bool quiet = true);
+void set_stderr_fun(std::function<void(const string&)> fun
+	= [](const string& str){std::cout << str << std::endl;});
 
 /**
  * Write a message to stdout or stderr and to the log.

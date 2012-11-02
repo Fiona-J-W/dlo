@@ -3,6 +3,7 @@
 #include "string_test.hpp"
 #include "sig_test.hpp"
 #include "conf_test.hpp"
+#include "output_test.hpp"
 
 int main(){
 	using dlo::writeln;
@@ -11,8 +12,10 @@ int main(){
 	unsigned int total_fails = 0;
 	
 	dlo::set_verbosity(1);
-	
-	writeln("Testing the stringutils");
+	writeln("Testing the output-lib");
+	total_fails += output_test();
+	dlo::set_verbosity(1);
+	writeln("\nTesting the stringutils");
 	total_fails += string_test();
 	writeln("\nTesting the signalhandling-lib");
 	total_fails += sig_test();

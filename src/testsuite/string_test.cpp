@@ -97,7 +97,7 @@ int string_test(){
 	else{
 		++fails;
 		error("failed!");
-		note(1, "Result was: ", u8len("aäß¿"));
+		note(1, "Result was: ", u8len(u8"aäß¿"));
 	}
 	
 	if(fails){

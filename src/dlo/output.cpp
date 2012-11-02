@@ -25,21 +25,24 @@ using std::endl;
 //in fact, those are like private members:
 namespace impl{
 	static int verbose_level = 0;
-	static int logfile = 0; //filedescriptor
+	static int logfile = -1; //filedescriptor
 	static int debug_level = 0;
-	static bool stdout_quiet = false;
-	static bool stderr_quiet = false;
 	static std::function<int(int)> log_close_function = close;
+	
+	static std::function<void(const std::string&)> write_normal
+		= [](const std::string& text){cout << text << endl;};
+	static std::function<void(const std::string&)> write_error
+		= [](const std::string& text){cerr << text << endl;};
 }
 
 /**
  * internal function that closes the logfile and checks the states
  */
 void close_logfile(){
-	if(impl::logfile){
+	if(impl::logfile != -1){
 		//do this with a temp var to prevent race-conditions:
 		volatile int tmp = impl::logfile;
-		impl::logfile = 0;
+		impl::logfile = -1;
 		if(impl::log_close_function){
 			impl::log_close_function( tmp );
 		}
@@ -55,7 +58,6 @@ int set_logfile(const string& filename){
 	if(!filename.empty()){
 		impl::log_close_function = close;
 		if( (impl::logfile = open(filename.c_str(),O_WRONLY | O_CREAT | O_APPEND, 0666)) == -1){
-			impl::logfile = 0;
 			error("Could not open logfile.");
 			return -1;
 		}
@@ -119,9 +121,8 @@ void _fatal(string text){
 	throw fatal_error_exception();
 }
 
-
 string get_timestamp(){
-	char buffer[30];
+	static char buffer[30]="\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
 	time_t t = time(NULL);
 	
 	strftime(buffer, 28, "%x %X", localtime(&t));
@@ -134,31 +135,28 @@ string get_timestamp(){
 void print_and_log(const string& prefix, const string& msg, bool normal){
 	print_and_log( stringutils::prefix_and_align(prefix, msg), normal);
 }
+
 void print_and_log(const string& msg, bool normal){
 	if( normal ){
-		if(!impl::stdout_quiet){
-			cout << msg << std::endl;
-		}
+		impl::write_normal( msg );
 	}
 	else{
-		if(!impl::stderr_quiet){
-			cerr << msg << std::endl;
-		}
+		impl::write_error( msg );
 	}
-	if( impl::logfile ){
+	if( impl::logfile != -1 ){
 		string str = stringutils::prefix_and_align( "[" + get_timestamp() + "] ", msg + '\n');
-		if( write( impl::logfile , str.c_str(), str.size()) == -1 ){
+		if( write(impl::logfile, str.c_str(), str.size()) == -1 ){
 			cerr << "Error: Could not write to logfile, Errorcode:" << errno << endl;
 		}
 	}
 }
 
-void set_stdout_quiet(bool quiet){
-	impl::stdout_quiet = quiet;
+void set_stdout_fun(std::function<void(const string&)> fun){
+	impl::write_normal = fun;
 }
 
-void set_stderr_quiet(bool quiet){
-	impl::stderr_quiet = quiet;
+void set_stderr_fun(std::function<void(const string&)> fun){
+	impl::write_error = fun;
 }
 
 
