@@ -22,6 +22,9 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+
+string default_get_note_prefix(int level);
+
 //in fact, those are like private members:
 namespace impl{
 	static int verbose_level = 0;
@@ -33,6 +36,7 @@ namespace impl{
 		= [](const std::string& text){cout << text << endl;};
 	static std::function<void(const std::string&)> write_error
 		= [](const std::string& text){cerr << text << endl;};
+	static std::function<string(int level)> get_note_prefix = default_get_note_prefix;
 }
 
 /**
@@ -95,13 +99,8 @@ void _writeln(std::ostream& stream, string text){
 }
 
 void _note(int level, string text){
-	if(level<=impl::verbose_level){
-		if(level){
-			print_and_log("NOTE(" + to_string(level) + "): ", text);
-		}
-		else{
-			print_and_log("NOTE: ", text);
-		}
+	if(level <= impl::verbose_level ){
+		print_and_log(impl::get_note_prefix(level), text);
 	}
 }
 
@@ -157,6 +156,24 @@ void set_stdout_fun(std::function<void(const string&)> fun){
 
 void set_stderr_fun(std::function<void(const string&)> fun){
 	impl::write_error = fun;
+}
+
+void set_note_prefix_fun(std::function<string(int)> fun){
+	if(fun == nullptr){
+		impl::get_note_prefix = default_get_note_prefix;
+	}
+	else{
+		impl::get_note_prefix = fun;
+	}
+}
+
+string default_get_note_prefix(int level){
+	if(level == 0){
+		return "NOTE: ";
+	}
+	else{
+		return "NOTE(" + to_string(level) + "): ";
+	}
 }
 
 

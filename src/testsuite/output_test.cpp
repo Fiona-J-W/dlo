@@ -152,6 +152,24 @@ int output_test(){
 	}
 	testout = "";
 	
+	////test set_note_prefix_fun():
+	set_note_prefix_fun([](int){return "";});
+	note(0,"note(0)");
+	if(testout != "note(0)"){
+		cerr << "test #1 for set_note_prefix_fun() failed" << endl;
+		++fails;
+	}
+	testout = "";
+	
+	set_note_prefix_fun();
+	note(0,"note(0)");
+	if(testout != "NOTE: note(0)"){
+		cerr << "test #1 for set_note_prefix_fun() failed" << endl;
+		++fails;
+	}
+	testout = "";
+	
+	
 	/////now the whole error-family in one test:
 	
 	warn("warn()");

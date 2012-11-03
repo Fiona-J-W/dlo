@@ -22,7 +22,7 @@ int conf_test(){
 	
 	note(1, "testing whether an uninitialised state throws...");
 	try{
-		settings S;
+		settings S("");
 		error("failed");
 		++fails;
 	}

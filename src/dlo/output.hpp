@@ -226,6 +226,12 @@ void set_stderr_fun(std::function<void(const string&)> fun
 	= [](const string& str){std::cout << str << std::endl;});
 
 /**
+ * set the funtion that creates the prefix for note() and notef().
+ * @param fun the function; if it is nullptr, the default will be set.
+ */
+void set_note_prefix_fun(std::function<string(int)> fun = nullptr);
+
+/**
  * Write a message to stdout or stderr and to the log.
  * 
  * @param msg the message that will be printed
