@@ -15,20 +15,20 @@ using namespace stringutils;
 
 //put the static members here:
 std::string settings::app_name = "";
-unordered_map<string,unordered_map<string,string> > settings::globalSettings;
+unordered_map<string,unordered_map<string,string> > settings::global_settings;
 
 
-unordered_map<string, string> readConfigFile(std::string filename, bool sections){
+unordered_map<string, string> read_config_file(std::string filename, bool sections){
 	ifstream file(filename.c_str());
 	if(! file.is_open()){
-		throw runtime_error("readConfigFile(): can't open file");
+		throw runtime_error("read_config_file(): can't open file");
 	}
 	unordered_map<string, string> data;
 	string line;
 	string section="";
 	pair<string,string> tmp;
 	unsigned int lineNumber=0;
-	list< pair<string, pair<int, string> > > unfoundReferences;
+	list< pair<string, pair<int, string> > > unfound_references;
 	while( getline(file, line) ){
 		++lineNumber;
 		line=strip(line);
@@ -60,7 +60,7 @@ unordered_map<string, string> readConfigFile(std::string filename, bool sections
 				if( sections && !section.empty() ){
 					key = section + "::" + key;
 				}
-				unfoundReferences.push_back( make_pair(key,
+				unfound_references.push_back( make_pair(key,
 					make_pair(lineNumber,value)) );
 				continue;
 			}
@@ -83,24 +83,24 @@ unordered_map<string, string> readConfigFile(std::string filename, bool sections
 		}
 	}
 	//now see whether some references can be resolved:
-	bool foundReference = false;
+	bool found_reference = false;
 	do{
-		foundReference = false;
-		for(list< pair<string, pair<int, string> > >::iterator it = unfoundReferences.begin();
-			it!=unfoundReferences.end();){
+		found_reference = false;
+		for(list< pair<string, pair<int, string> > >::iterator it = unfound_references.begin();
+			it!=unfound_references.end();){
 			if(data.count(it->second.second)){
-				foundReference = true;
+				found_reference = true;
 				data[it->first] = data[it->second.second];
-				it = unfoundReferences.erase(it);
+				it = unfound_references.erase(it);
 			}
 			else{
 				++it;
 			}
 			
 		}
-	} while(foundReference);
-	for(list< pair<string, pair<int, string> > >::iterator it= unfoundReferences.begin();
-		it!=unfoundReferences.end();++it){
+	} while(found_reference);
+	for(list< pair<string, pair<int, string> > >::iterator it= unfound_references.begin();
+		it!=unfound_references.end();++it){
 		errorf("undefined reference in configfile (%s, %s) for “%s” to “%s”",
 			filename, it->second.first, it->first, it->second.second);
 	}
@@ -120,9 +120,9 @@ settings::settings(string config)
 	if(config.empty()){
 		return;
 	}
-	if(! globalSettings.count(config) ){
+	if(! global_settings.count(config) ){
 		try{
-			globalSettings[config] = readConfigFile( text(
+			global_settings[config] = read_config_file( text(
 				getenv("XDG_CONFIG_HOME"), "/", app_name, "/", config, ".ini" ) );
 		}
 		catch(std::logic_error& e){
@@ -135,23 +135,23 @@ string settings::operator[](string key){
 	if(app_name.empty()){
 		throw uninitialised_config_error("The name of the programm was not set properly.");
 	}
-	return globalSettings[this->file][key];
+	return global_settings[this->file][key];
 }
 
-std::string settings::getValue(std::string file, std::string key){
+std::string settings::get_value(std::string file, std::string key){
 	if(app_name.empty()){
 		throw uninitialised_config_error("The name of the programm was not set properly.");
 	}
-	if( ! globalSettings.count(file) ){
+	if( ! global_settings.count(file) ){
 		try{
-			globalSettings[file] = readConfigFile(text(
+			global_settings[file] = read_config_file(text(
 				getenv("XDG_CONFIG_HOME"), "/", app_name, "/", file, ".ini") );
 		}
 		catch(std::logic_error& e){
 			fatal("XDG_CONFIG_HOME is not defined");
 		}
 	}
-	return globalSettings[file][key];
+	return global_settings[file][key];
 }
 
 } //namespace dlo

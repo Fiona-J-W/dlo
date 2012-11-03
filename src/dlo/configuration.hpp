@@ -17,7 +17,7 @@ namespace dlo{
  * @param sections enable or disable the use of sections; the values in a 
  *   section can be accessed via "section::key"
  */
-std::unordered_map<std::string, std::string> readConfigFile(std::string filename, 
+std::unordered_map<std::string, std::string> read_config_file(std::string filename, 
 	bool sections=true);
 
 /**
@@ -57,7 +57,7 @@ class settings{
 		 * @param key name of the key
 		 * @throws dlo::uninitialised_config_error if settings::app_name is unset.
 		 */
-		static std::string getValue(std::string file, std::string key);
+		static std::string get_value(std::string file, std::string key);
 		
 	private:
 		/**
@@ -74,7 +74,7 @@ class settings{
 		 * static cache for all read settings
 		 */
 		static std::unordered_map<std::string, 
-			std::unordered_map<std::string,std::string> > globalSettings;
+			std::unordered_map<std::string,std::string> > global_settings;
 };
 
 /**
