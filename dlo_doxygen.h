@@ -15,7 +15,7 @@
  * @subsection sub_sec_output Output
  * This was the first module of DLO and is still a relativly advanced 
  * one. It contains several output-functions with modern C++11-interfaces 
- * (e.g. typesafe variadic functions).
+ * (e.g. safe variadic functions).
  * 
  * @subsection sub_sec_strpr Stringprocessing
  * This module offers some convenience-functions for working with strings.
