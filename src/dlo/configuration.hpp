@@ -41,7 +41,7 @@ class settings{
 		 *   the ending '.ini' will be appended
 		 * @throws dlo::uninitialised_config_error if settings::app_name is unset.
 		 */
-		settings(std::string config="");
+		settings(std::string config);
 		
 		/**
 		 * get the value to the given key in this->file
@@ -80,7 +80,7 @@ class settings{
 /**
  * Exception that indicates, that the name of the program has not been set correctly.
  */
-class uninitialised_config_error: public std::logic_error{
+class uninitialised_config_error public std::logic_error{
 	/**
 	 * Just reeimplement the inherited constructor from std::logic_error.
 	 * @param what_arg an errormessage
