@@ -29,10 +29,10 @@ int conf_test(){
 	catch(uninitialised_config_error &e){
 		note(1,"success");
 	}
-	settings::init("conftest");
-	mkdir("conftest", 0777);
+	settings::init("test");
+	mkdir("test", 0777);
 	
-	std::ofstream testfile("conftest/test.ini");
+	std::ofstream testfile("test/test.ini");
 	
 	
 	swriteln(testfile,
@@ -80,8 +80,8 @@ int conf_test(){
 	
 	//clean up:
 	testfile.close();
-	unlink("conftest/test.ini");
-	rmdir("conftest");
+	unlink("test/test.ini");
+	rmdir("test");
 	
 	//set the environment back:
 	setenv("XDG_CONFIG_HOME",old_config_home,1);

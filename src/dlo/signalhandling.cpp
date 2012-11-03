@@ -12,7 +12,7 @@ namespace dlo{
 using std::vector;
 
 //put the instances of the static vars here:
-std::atomic_uint signalhandling::signal;
+std::atomic_int signalhandling::signal;
 struct sigaction signalhandling::handler_struct;
 
 //declare the actual signalhandler:
@@ -37,9 +37,10 @@ int signalhandling::reset(){
 }
 
 void signalhandling::check(){
+	using std::to_string;
 	auto sig = signal.load();
 	if(sig){
-		throw signal_exception( stringutils::text("caught signal #", sig), sig );
+		throw signal_exception( "caught signal #" + to_string(sig), sig );
 	}
 }
 

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <sys/stat.h>
+
 #include "../dlo/output.hpp"
 #include "../dlo/stringutils.hpp"
 
@@ -14,7 +16,6 @@ int output_test(){
 	using std::cout;
 	using std::cerr;
 	using std::endl;
-	using std::to_string;
 	using std::stringstream;
 	int fails = 0;
 	
@@ -259,6 +260,8 @@ int output_test(){
 		++fails;
 	}
 	teststream.str("");
+	
+	mkdir("test",0777);
 	
 	
 	///////////////////////////////////////////////////////////////////////////////////
