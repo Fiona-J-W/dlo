@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <cstdlib>
+#include <cctype>
 #include <cassert>
 
 namespace dlo{
@@ -14,16 +15,15 @@ using namespace std;
 
 string strip(string str){
 	size_t pos=0;
-	while(str[pos] == ' ' || str[pos] == '\t'){
+	while( pos < str.size() && isspace(str[pos])){
 		++pos;
 	}
 	str.erase(0,pos);
-	if(str == ""){
-		return "";
+	if(str.empty()){
+		return string();
 	}
 	pos=str.size() - 1;
-	while(str[pos] == ' ' || str[pos] == '\t'){
-		//str[pos] = 0;
+	while( pos > 0 && isspace(str[pos])){
 		--pos;
 	}
 	str.erase(pos+1);

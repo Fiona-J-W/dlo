@@ -40,6 +40,15 @@ int string_test(){
 		error("failed!");
 	}
 	
+	notef(1, "testing dlo::stringutils::%s()...","strip");
+	if(strip("foo bar") == "foo bar"){
+		note(1,"success.");
+	}
+	else{
+		++fails;
+		error("failed!");
+	}
+	
 	notef(1, "testing dlo::stringutils::%s()...","split");
 	if(split("foo:bar:baz",":") 
 		== (std::vector<std::string>{"foo", "bar", "baz"}) ){

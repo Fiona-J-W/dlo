@@ -110,7 +110,7 @@ int output_test(){
 	//testing the note-functions:
 	
 	note(0,"note(0)");
-	if(testout != "NOTE: note(0)"){
+	if(testout != "note(0)"){
 		cerr << "test #1 for note() failed" << endl;
 		++fails;
 	}
@@ -132,7 +132,7 @@ int output_test(){
 	
 	////notef:
 	notef(0,"notef(%s)",0);
-	if(testout != "NOTE: notef(0)"){
+	if(testout != "notef(0)"){
 		cerr << "test #1 for notef() failed" << endl;
 		++fails;
 	}
@@ -153,9 +153,9 @@ int output_test(){
 	testout = "";
 	
 	////test set_note_prefix_fun():
-	set_note_prefix_fun([](int){return "";});
+	set_note_prefix_fun([](int){return ">";});
 	note(0,"note(0)");
-	if(testout != "note(0)"){
+	if(testout != ">note(0)"){
 		cerr << "test #1 for set_note_prefix_fun() failed" << endl;
 		++fails;
 	}
@@ -163,8 +163,8 @@ int output_test(){
 	
 	set_note_prefix_fun();
 	note(0,"note(0)");
-	if(testout != "NOTE: note(0)"){
-		cerr << "test #1 for set_note_prefix_fun() failed" << endl;
+	if(testout != "note(0)"){
+		cerr << "test #2 for set_note_prefix_fun() failed" << endl;
 		++fails;
 	}
 	testout = "";

@@ -1,7 +1,5 @@
 #include "signalhandling.hpp"
 
-#include "stringutils.hpp"
-
 #include <stdexcept>
 #include <string>
 #include <cstdint>
@@ -20,7 +18,7 @@ extern "C" void signal_handler(int signal);
 
 
 void signalhandling::init(vector<int> sigs){
-	signal.store( 0 );
+	signal.store(0);
 	handler_struct.sa_handler = signal_handler;
 	for(auto sig: sigs){
 		sigaction(sig, &handler_struct, NULL);
@@ -40,13 +38,13 @@ void signalhandling::check(){
 	using std::to_string;
 	auto sig = signal.load();
 	if(sig){
-		throw signal_exception( "caught signal #" + to_string(sig), sig );
+		throw signal_exception("caught signal #" + to_string(sig), sig);
 	}
 }
 
 extern "C"{
 void signal_handler(int signal){
-	signalhandling::signal.store( signal );
+	signalhandling::signal.store(signal);
 }
 }
 

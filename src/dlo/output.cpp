@@ -10,6 +10,8 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <ctime>
+#include <mutex>
+#include <atomic>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -25,12 +27,16 @@ using std::endl;
 
 string default_get_note_prefix(int level);
 
+// TODO: fix thread-safety
+
 //in fact, those are like private members:
 namespace impl{
-	static int verbose_level = 0;
-	static int logfile = -1; //filedescriptor
-	static int debug_level = 0;
+	static std::atomic_int verbose_level{0};
+	static std::atomic_int debug_level{0};
+	static int logfile{-1}; //filedescriptor
 	static std::function<int(int)> log_close_function = close;
+	static std::mutex write_mutex;
+	static std::mutex note_prefix_mutex;
 	
 	static std::function<void(const std::string&)> write_normal
 		= [](const std::string& text){cout << text << endl;};
@@ -44,12 +50,10 @@ namespace impl{
  */
 void close_logfile(){
 	if(impl::logfile != -1){
-		//do this with a temp var to prevent race-conditions:
-		volatile int tmp = impl::logfile;
-		impl::logfile = -1;
 		if(impl::log_close_function){
-			impl::log_close_function( tmp );
+			impl::log_close_function(impl::logfile);
 		}
+		impl::logfile = -1;
 	}
 }
 
@@ -58,6 +62,7 @@ void set_verbosity(int level){
 }
 
 int set_logfile(const string& filename){
+	std::lock_guard<std::mutex> guard{impl::write_mutex};
 	close_logfile();
 	if(!filename.empty()){
 		impl::log_close_function = close;
@@ -73,6 +78,7 @@ int set_logfile(const string& filename){
 }
 
 void set_logfile(int fd, std::function<int(int)> close_fun){
+	std::lock_guard<std::mutex> guard{impl::write_mutex};
 	close_logfile();
 	impl::log_close_function = close_fun;
 	impl::logfile = fd;
@@ -100,7 +106,12 @@ void _writeln(std::ostream& stream, string text){
 
 void _note(int level, string text){
 	if(level <= impl::verbose_level ){
-		print_and_log(impl::get_note_prefix(level), text);
+		std::string prefix;
+		/* synchronize */{
+			std::lock_guard<std::mutex> guard{impl::note_prefix_mutex};
+			prefix = impl::get_note_prefix(level);
+		}
+		print_and_log(prefix, text);
 	}
 }
 
@@ -137,11 +148,14 @@ void print_and_log(const string& prefix, const string& msg, bool normal){
 
 void print_and_log(const string& msg, bool normal){
 	if( normal ){
+		std::lock_guard<std::mutex> guard{impl::write_mutex};
 		impl::write_normal( msg );
 	}
 	else{
+		std::lock_guard<std::mutex> guard{impl::write_mutex};
 		impl::write_error( msg );
 	}
+	std::lock_guard<std::mutex> guard{impl::write_mutex};
 	if( impl::logfile != -1 ){
 		string str = stringutils::prefix_and_align( "[" + get_timestamp() + "] ", msg + '\n');
 		if( write(impl::logfile, str.c_str(), str.size()) == -1 ){
@@ -151,25 +165,29 @@ void print_and_log(const string& msg, bool normal){
 }
 
 void set_stdout_fun(std::function<void(const string&)> fun){
+	std::lock_guard<std::mutex> guard{impl::write_mutex};
 	impl::write_normal = fun;
 }
 
 void set_stderr_fun(std::function<void(const string&)> fun){
+	std::lock_guard<std::mutex> guard{impl::write_mutex};
 	impl::write_error = fun;
 }
 
 void set_note_prefix_fun(std::function<string(int)> fun){
 	if(fun == nullptr){
+		std::lock_guard<std::mutex> guard{impl::note_prefix_mutex};
 		impl::get_note_prefix = default_get_note_prefix;
 	}
 	else{
+		std::lock_guard<std::mutex> guard{impl::note_prefix_mutex};
 		impl::get_note_prefix = fun;
 	}
 }
 
 string default_get_note_prefix(int level){
 	if(level == 0){
-		return "NOTE: ";
+		return "";
 	}
 	else{
 		return "NOTE(" + to_string(level) + "): ";
