@@ -78,7 +78,7 @@ class signalhandling{
 		/**
 		 * number of the last recieved signal; init will set this to 0.
 		 */
-		volatile static std::atomic_int signal;
+		static std::atomic_int signal;
 		
 		/**
 		 * struct that contains the information, what should be done after recieving

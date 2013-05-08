@@ -10,7 +10,7 @@ namespace dlo{
 using std::vector;
 
 //put the instances of the static vars here:
-volatile std::atomic_int signalhandling::signal = ATOMIC_VAR_INIT(0);
+std::atomic_int signalhandling::signal = ATOMIC_VAR_INIT(0);
 struct sigaction signalhandling::handler_struct;
 
 //declare the actual signalhandler:
