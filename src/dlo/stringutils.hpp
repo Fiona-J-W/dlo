@@ -27,7 +27,7 @@ using std::stringstream;
  * @param args the arguments
  */
 template<typename... T>
-string text(T...args);
+string text(const T&...args);
 
 /**
  * Create a string from a formatstring and some arguments.
@@ -46,13 +46,13 @@ string text(T...args);
  * In all other cases the substring that terminates before the first following
  * 's' will be taken and converted to a int. This int will be used as index to 
  * which arg from args shall be inserted. Note that in this case arg[0] is the
- * formatstring itself.
+ * formatstring itself; using it is perfectly valid behaviour.
  *
  * @param formatstring the formatstring
  * @param args the other arguments
  */
 template<typename...T>
-string textf(const string& formatstring,T...args);
+string textf(const string& formatstring, const T&...args);
 
 
 /**

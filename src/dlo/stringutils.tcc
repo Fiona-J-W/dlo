@@ -9,18 +9,18 @@ namespace dlo{
 namespace stringutils{
 
 template<typename T>
-void _text_helper(stringstream& stream, T arg){
+void _text_helper(stringstream& stream, const T& arg){
 	stream << arg;
 }
 
 template<typename T, typename... argT>
-void _text_helper(stringstream& stream, T arg,  argT...args){
+void _text_helper(stringstream& stream, const T& arg,  const argT&...args){
 	stream << arg;
 	_text_helper(stream, args...);
 }
 
 template<typename... T>
-string text(T...args){
+string text(const T&...args){
 	stringstream returnstream;
 	_text_helper(returnstream, args...);
 	return returnstream.str();
@@ -29,14 +29,14 @@ string text(T...args){
 
 
 template<typename T>
-void _textf_helper(vector<string>& vec, T arg){
+void _textf_helper(vector<string>& vec, const T& arg){
 	stringstream tmpstream;
 	tmpstream << arg;
 	vec.push_back(tmpstream.str());
 }
 
 template<typename T, typename... argT>
-void _textf_helper(vector<string>& vec, T arg, argT...args){
+void _textf_helper(vector<string>& vec, const T& arg, const argT&...args){
 	stringstream tmpstream;
 	tmpstream << arg;
 	vec.push_back(tmpstream.str());
@@ -46,7 +46,7 @@ void _textf_helper(vector<string>& vec, T arg, argT...args){
 string _textf_impl(const std::vector<string>& strings);
 
 template<typename...T>
-string textf(const string& formatstring, T...args){
+string textf(const string& formatstring, const T&...args){
 	vector<string> strings;
 	strings.push_back(formatstring);
 	_textf_helper(strings, args...);
