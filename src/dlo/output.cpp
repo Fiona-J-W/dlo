@@ -123,8 +123,10 @@ void _error(string text){
 	print_and_log("ERROR: ", text, false);
 }
 
+namespace {
 class fatal_error_exception{
 };
+}
 
 void _fatal(string text){
 	print_and_log("FATAL: ", text, false);
