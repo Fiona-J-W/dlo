@@ -59,6 +59,13 @@ class settings{
 		 */
 		static std::string get_value(std::string file, std::string key);
 		
+		/**
+		 * get the path to the config-dir of this program.
+		 * @throws dlo::uninitialised_config_error if settings::app_name is unset.
+		 * @throws std::runtime_error if neither $XDG_CONFIG_HOME nor $HOME is defined.
+		 */
+		static std::string get_conf_dir();
+		
 	private:
 		/**
 		 * the name of the whole application.
@@ -75,6 +82,12 @@ class settings{
 		 */
 		static std::unordered_map<std::string, 
 			std::unordered_map<std::string,std::string> > global_settings;
+		
+		/**
+		 * Checks whether settings::app_name is set.
+		 * @throws dlo::uninitialised_config_error if settings::app_name is unset.
+		 */
+		static void enforce_initialization();
 };
 
 /**

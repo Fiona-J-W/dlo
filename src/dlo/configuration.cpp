@@ -33,7 +33,7 @@ unordered_map<string, string> read_config_file(std::string filename, bool sectio
 		++lineNumber;
 		line=strip(line);
 		//ignore empty lines and comments:
-		if(!line.length() || line[0] == '#'){
+		if(line.empty() || line[0] == '#'){
 			continue;
 		}
 		if( sections && (line[0] == '[') && (line[line.size()-1] == ']') ){
@@ -114,44 +114,50 @@ void settings::init(std::string app_name_){
 settings::settings(string config)
 	: file( config )
 {
-	if(app_name.empty()){
-		throw uninitialised_config_error("The name of the programm was not set properly.");
-	}
+	settings::enforce_initialization();
 	if(config.empty()){
 		return;
 	}
 	if(! global_settings.count(config) ){
-		try{
-			global_settings[config] = read_config_file( text(
-				getenv("XDG_CONFIG_HOME"), "/", app_name, "/", config, ".ini" ) );
-		}
-		catch(std::logic_error& e){
-			fatal("XDG_CONFIG_HOME is not defined");
-		}
+		global_settings[config] = read_config_file( get_conf_dir() + config + ".ini");
 	}
 }
 
 string settings::operator[](string key){
-	if(app_name.empty()){
-		throw uninitialised_config_error("The name of the programm was not set properly.");
-	}
+	settings::enforce_initialization();
 	return global_settings[this->file][key];
 }
 
 std::string settings::get_value(std::string file, std::string key){
+	settings::enforce_initialization();
+	if( ! global_settings.count(file) ){
+		global_settings[file] = read_config_file(get_conf_dir() + file + ".ini");
+	}
+	return global_settings[file][key];
+}
+
+std::string settings::get_conf_dir(){
+	settings::enforce_initialization();
+	std::string general_conf_dir;
+	auto xdg_config_home = getenv("XDG_CONFIG_HOME");
+	if(xdg_config_home){
+		general_conf_dir = xdg_config_home;
+	}
+	else {
+		auto home = getenv("HOME");
+		if(!home){
+			throw std::runtime_error{"neither $XDG_CONFIG_HOME nor $HOME are defined"};
+		}
+		general_conf_dir = home;
+		general_conf_dir += "/.config";
+	}
+	return general_conf_dir + "/" + app_name + "/";
+}
+
+void settings::enforce_initialization(){
 	if(app_name.empty()){
 		throw uninitialised_config_error("The name of the programm was not set properly.");
 	}
-	if( ! global_settings.count(file) ){
-		try{
-			global_settings[file] = read_config_file(text(
-				getenv("XDG_CONFIG_HOME"), "/", app_name, "/", file, ".ini") );
-		}
-		catch(std::logic_error& e){
-			fatal("XDG_CONFIG_HOME is not defined");
-		}
-	}
-	return global_settings[file][key];
 }
 
 } //namespace dlo
