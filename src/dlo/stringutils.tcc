@@ -5,52 +5,61 @@
 #ifndef STRINGUTILS_TCC
 #define STRINGUTILS_TCC
 
+#include <utility>
+
 namespace dlo{
 namespace stringutils{
 
+namespace impl{
+
 template<typename T>
-void _text_helper(stringstream& stream, const T& arg){
-	stream << arg;
+void text_helper(stringstream& stream, T&& arg){
+	stream << std::forward<T>(arg);
 }
 
-template<typename T, typename... argT>
-void _text_helper(stringstream& stream, const T& arg,  const argT&...args){
-	stream << arg;
-	_text_helper(stream, args...);
+template<typename T, typename... Targs>
+void text_helper(stringstream& stream, T&& arg,  Targs&&...args){
+	stream << std::forward<T>(arg);
+	text_helper(stream, std::forward<Targs>(args)...);
 }
+
+} //namespace ompl
 
 template<typename... T>
-string text(const T&...args){
+string text(T&&...args){
 	stringstream returnstream;
-	_text_helper(returnstream, args...);
+	impl::text_helper(returnstream, std::forward<T>(args)...);
 	return returnstream.str();
 }
 
 
+namespace impl{
 
 template<typename T>
-void _textf_helper(vector<string>& vec, const T& arg){
+void textf_helper(vector<string>& vec, T&& arg){
 	stringstream tmpstream;
-	tmpstream << arg;
+	tmpstream << std::forward<T>(arg);
 	vec.push_back(tmpstream.str());
 }
 
-template<typename T, typename... argT>
-void _textf_helper(vector<string>& vec, const T& arg, const argT&...args){
+template<typename T, typename... Targs>
+void textf_helper(vector<string>& vec, T&& arg, Targs&&...args){
 	stringstream tmpstream;
-	tmpstream << arg;
+	tmpstream << std::forward<T>(arg);
 	vec.push_back(tmpstream.str());
-	_textf_helper(vec, args...);
+	textf_helper(vec, std::forward<Targs>(args)...);
 }
 
-string _textf_impl(const std::vector<string>& strings);
+string textf_impl(const std::vector<string>& strings);
+
+} //namespace ompl
 
 template<typename...T>
-string textf(const string& formatstring, const T&...args){
+string textf(const string& formatstring, T&&...args){
 	vector<string> strings;
 	strings.push_back(formatstring);
-	_textf_helper(strings, args...);
-	return _textf_impl(strings);
+	impl::textf_helper(strings, std::forward<T>(args)...);
+	return impl::textf_impl(strings);
 }
 
 } //namespace stringutils

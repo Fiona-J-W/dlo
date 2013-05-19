@@ -27,7 +27,7 @@ using std::stringstream;
  * @param args the arguments
  */
 template<typename... T>
-string text(const T&...args);
+string text(T&&...args);
 
 /**
  * Create a string from a formatstring and some arguments.
@@ -52,7 +52,7 @@ string text(const T&...args);
  * @param args the other arguments
  */
 template<typename...T>
-string textf(const string& formatstring, const T&...args);
+string textf(const string& formatstring, T&&...args);
 
 
 /**

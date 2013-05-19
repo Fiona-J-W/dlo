@@ -91,7 +91,8 @@ string decode(string str){
 	return returnstr;
 }
 
-string _textf_impl(const std::vector<string>& strings){
+namespace impl{
+string textf_impl(const std::vector<string>& strings){
 	//this is an internal function, so this can be done via an assert:
 	//(if people use it from outside without care it is THEIR fault, if this explodes)
 	assert(!strings.empty());
@@ -132,6 +133,7 @@ string _textf_impl(const std::vector<string>& strings){
 	}
 	return resultstream.str();
 }
+} // namespace impl
 
 
 std::string prefix_and_align(const std::string& prefix, const std::string& text){
