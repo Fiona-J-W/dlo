@@ -13,12 +13,12 @@ namespace stringutils{
 namespace impl{
 
 template<typename T>
-void text_helper(stringstream& stream, T&& arg){
+inline void text_helper(stringstream& stream, T&& arg){
 	stream << std::forward<T>(arg);
 }
 
 template<typename T, typename... Targs>
-void text_helper(stringstream& stream, T&& arg,  Targs&&...args){
+inline void text_helper(stringstream& stream, T&& arg,  Targs&&...args){
 	stream << std::forward<T>(arg);
 	text_helper(stream, std::forward<Targs>(args)...);
 }
@@ -36,14 +36,14 @@ string text(T&&...args){
 namespace impl{
 
 template<typename T>
-void textf_helper(vector<string>& vec, T&& arg){
+inline void textf_helper(vector<string>& vec, T&& arg){
 	stringstream tmpstream;
 	tmpstream << std::forward<T>(arg);
 	vec.push_back(tmpstream.str());
 }
 
 template<typename T, typename... Targs>
-void textf_helper(vector<string>& vec, T&& arg, Targs&&...args){
+inline void textf_helper(vector<string>& vec, T&& arg, Targs&&...args){
 	stringstream tmpstream;
 	tmpstream << std::forward<T>(arg);
 	vec.push_back(tmpstream.str());
