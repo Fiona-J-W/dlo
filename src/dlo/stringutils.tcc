@@ -23,7 +23,7 @@ inline void text_helper(stringstream& stream, T&& arg,  Targs&&...args){
 	text_helper(stream, std::forward<Targs>(args)...);
 }
 
-} //namespace ompl
+} //namespace impl
 
 template<typename... T>
 string text(T&&...args){
@@ -52,7 +52,7 @@ inline void textf_helper(vector<string>& vec, T&& arg, Targs&&...args){
 
 string textf_impl(const std::vector<string>& strings);
 
-} //namespace ompl
+} //namespace impl
 
 template<typename...T>
 string textf(const string& formatstring, T&&...args){
