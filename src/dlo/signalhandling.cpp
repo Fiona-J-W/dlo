@@ -1,23 +1,32 @@
 #include "signalhandling.hpp"
 
+#include <atomic>
 #include <stdexcept>
 #include <string>
 #include <cstdint>
 #include <climits>
 
+// This should work almost everywhere:
+#if ATOMIC_INT_LOCK_FREE != 2
+	#error "Your platform doesn't support a lockfree atomic<int>."
+#endif
+
 namespace dlo{
 
+namespace signalhandling {
 using std::vector;
 
 //put the instances of the static vars here:
-std::atomic_int signalhandling::signal = ATOMIC_VAR_INIT(0);
-struct sigaction signalhandling::handler_struct;
+namespace {
+	std::atomic_int signal = ATOMIC_VAR_INIT(0);
+	struct sigaction handler_struct;
+}
 
 //declare the actual signalhandler:
 extern "C" void signal_handler(int signal);
 
 
-void signalhandling::init(vector<int> sigs){
+void init(vector<int> sigs){
 	signal.store(0);
 	handler_struct.sa_handler = signal_handler;
 	for(auto sig: sigs){
@@ -26,15 +35,15 @@ void signalhandling::init(vector<int> sigs){
 }
 
 
-int signalhandling::get_last_signal(){
+int get_last_signal(){
 	return signal.load();
 }
 
-int signalhandling::reset(){
+int reset(){
 	return signal.fetch_and(0);
 }
 
-void signalhandling::check(){
+void check(){
 	using std::to_string;
 	auto sig = signal.load();
 	if(sig){
@@ -42,11 +51,14 @@ void signalhandling::check(){
 	}
 }
 
+
 extern "C"{
-void signal_handler(int signal){
-	signalhandling::signal.store(signal);
+void signal_handler(int sign){
+	signal.store(sign);
 }
 }
+
+} //namespace signalhandling
 
 signal_exception::signal_exception(const std::string& what_arg, int sig_num):
 	std::runtime_error(what_arg),

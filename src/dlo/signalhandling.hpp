@@ -4,24 +4,12 @@
 #include <vector>
 #include <csignal>
 #include <stdexcept>
-#include <atomic>
 
-
-// This should work almost everywhere:
-#if ATOMIC_INT_LOCK_FREE != 2
-	#error "Your platform doesn't support a lockfree atomic<int>."
-#endif
 
 namespace dlo{
 
-extern "C"{
-	void signal_handler(int signal);
-}
-
 /**
- * This class bundles everything you need for signalhandling.
- * 
- * This class is static.
+ * This namespace bundles everything you need for signalhandling.
  * 
  * To use it, call the init method with a vector of signals you want to have managed
  * by this class once (as early as possible) in your programm.
@@ -30,32 +18,24 @@ extern "C"{
  * to their output in a proper way.
  * 
  */
-class signalhandling{
-	private:
-		//as doxygen on debian doesn't understand ctor=delete, make it private:
-		/**
-		 * We don't need a constructor, so let's delete it.
-		 */
-		signalhandling() = delete;
-		
-	public:
+namespace signalhandling{
 		/**
 		 * init function for signalhandling. This has to be called early.
 		 * @param sigs vector of the signals, that should be handled (defaults to 
 		 *        SIGINT and SIGTERM)
 		 */
-		static void init(std::vector<int> sigs = {SIGINT, SIGTERM});
+		void init(std::vector<int> sigs = {SIGINT, SIGTERM});
 		
 		/**
 		 * query for the last signal; this will return 0 if no signal has been caught.
 		 */
-		static int get_last_signal();
+		int get_last_signal();
 		
 		/**
 		 * reset the saved signal to 0. 
 		 * @returns the value of signalhandling::signal before setting it to zero.
 		 */
-		static int reset();
+		int reset();
 		
 		/**
 		 * check if signalhandling::signal is set and throw a signal_exception if this 
@@ -63,29 +43,8 @@ class signalhandling{
 		 * @throws signal_exception if signalhandling::signal is set to another value 
 		 *                          than zero.
 		 */
-		static void check();
-		
-	private:
-		
-		/**
-		 * the actual handlerfunction, that will set signalhandling::signal to 
-		 * the new value
-		 */
-		friend void signal_handler(int signal);
-		
-		//attributes:
-		
-		/**
-		 * number of the last recieved signal; init will set this to 0.
-		 */
-		static std::atomic_int signal;
-		
-		/**
-		 * struct that contains the information, what should be done after recieving
-		 * a signal
-		 */
-		static struct sigaction handler_struct;
-};
+		void check();
+}
 
 
 
