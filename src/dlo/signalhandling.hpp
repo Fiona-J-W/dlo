@@ -19,31 +19,31 @@ namespace dlo{
  * 
  */
 namespace signalhandling{
-		/**
-		 * init function for signalhandling. This has to be called early.
-		 * @param sigs vector of the signals, that should be handled (defaults to 
-		 *        SIGINT and SIGTERM)
-		 */
-		void init(std::vector<int> sigs = {SIGINT, SIGTERM});
-		
-		/**
-		 * query for the last signal; this will return 0 if no signal has been caught.
-		 */
-		int get_last_signal();
-		
-		/**
-		 * reset the saved signal to 0. 
-		 * @returns the value of signalhandling::signal before setting it to zero.
-		 */
-		int reset();
-		
-		/**
-		 * check if signalhandling::signal is set and throw a signal_exception if this 
-		 * is the case; otherwise do nothing.
-		 * @throws signal_exception if signalhandling::signal is set to another value 
-		 *                          than zero.
-		 */
-		void check();
+	/**
+	 * init function for signalhandling. This has to be called early.
+	 * @param sigs vector of the signals, that should be handled (defaults to 
+	 *        SIGINT and SIGTERM)
+	 */
+	void init(std::vector<int> sigs = {SIGINT, SIGTERM});
+	
+	/**
+	 * query for the last signal; this will return 0 if no signal has been caught.
+	 */
+	int get_last_signal();
+	
+	/**
+	 * reset the saved signal to 0. 
+	 * @returns the value of signalhandling::signal before setting it to zero.
+	 */
+	int reset();
+	
+	/**
+	 * check if signalhandling::signal is set and throw a signal_exception if this 
+	 * is the case; otherwise do nothing.
+	 * @throws signal_exception if signalhandling::signal is set to another value 
+	 *                          than zero.
+	 */
+	void check();
 }
 
 
@@ -72,7 +72,7 @@ class signal_exception: public std::runtime_error{
 		int _sig_num;
 };
 
-} //namespace ldo
+} //namespace dlo
 
 
 #endif

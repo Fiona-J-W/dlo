@@ -53,8 +53,8 @@ void check(){
 
 
 extern "C"{
-void signal_handler(int sign){
-	signal.store(sign);
+void signal_handler(int sig){
+	signal.store(sig);
 }
 }
 
