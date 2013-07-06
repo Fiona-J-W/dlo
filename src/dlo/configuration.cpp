@@ -3,6 +3,7 @@
 #include "output.hpp"
 
 #include <list>
+#include <tuple>
 #include <fstream>
 #include <stdexcept>
 #include <iostream>
@@ -27,8 +28,11 @@ unordered_map<string, string> read_config_file(std::string filename, bool sectio
 	string line;
 	string section="";
 	pair<string,string> tmp;
+	std::string key;
+	std::string value;
 	unsigned int lineNumber=0;
-	list< pair<string, pair<int, string> > > unfound_references;
+	// in order to prevent iterator-invalidation, we need a std::list
+	std::list<std::tuple<std::string, int, std::string>> unfound_references;
 	while( getline(file, line) ){
 		++lineNumber;
 		line=strip(line);
@@ -43,25 +47,28 @@ unordered_map<string, string> read_config_file(std::string filename, bool sectio
 			continue;
 		}
 		try{
-			tmp = split_once(line,"=");
+			std::tie(key, value) = split_once(line,"=");
+			key = strip(key);
+			value = strip(value);
+			
+			if( sections && !section.empty() ){
+				key = section + "::" + key;
+			}
 		}
 		catch(const invalid_argument &e){
 			errorf("invalid line in configfile (%s, %s): No delimiter (“%s”)", 
 				filename, lineNumber, line);
 			continue;
 		}
-		string value = strip( tmp.second );
 		if( value.length() && value[0] != '"' ){
+			if( sections && !section.empty() ){
+				value = section + "::" + value;
+			}
 			if( data.count(value) ){
 				value = data[value];
 			}
 			else{
-				string key = strip(tmp.first);
-				if( sections && !section.empty() ){
-					key = section + "::" + key;
-				}
-				unfound_references.push_back( make_pair(key,
-					make_pair(lineNumber,value)) );
+				unfound_references.emplace_back( make_tuple(key, lineNumber,value) );
 				continue;
 			}
 		}
@@ -75,22 +82,17 @@ unordered_map<string, string> read_config_file(std::string filename, bool sectio
 				continue;
 			}
 		}
-		if( !sections ||  section.empty() ){
-			data[ strip( tmp.first ) ] = value;
-		}
-		else{
-			data[ section+"::"+strip(tmp.first) ] = value;
-		}
+		data.insert(std::make_pair(strip(key), value));
 	}
 	//now see whether some references can be resolved:
 	bool found_reference = false;
 	do{
 		found_reference = false;
-		for(list< pair<string, pair<int, string> > >::iterator it = unfound_references.begin();
-			it!=unfound_references.end();){
-			if(data.count(it->second.second)){
+		for(auto it = unfound_references.begin(); it!=unfound_references.end();){
+			auto match_it = data.find(std::get<2>(*it));
+			if(match_it != data.end()){
 				found_reference = true;
-				data[it->first] = data[it->second.second];
+				data.insert(std::make_pair(std::get<0>(*it), match_it->second));
 				it = unfound_references.erase(it);
 			}
 			else{
@@ -99,10 +101,9 @@ unordered_map<string, string> read_config_file(std::string filename, bool sectio
 			
 		}
 	} while(found_reference);
-	for(list< pair<string, pair<int, string> > >::iterator it= unfound_references.begin();
-		it!=unfound_references.end();++it){
+	for(const auto& ref : unfound_references){
 		errorf("undefined reference in configfile (%s, %s) for “%s” to “%s”",
-			filename, it->second.first, it->first, it->second.second);
+			filename, std::get<1>(ref), std::get<0>(ref), std::get<2>(ref));
 	}
 	return data;
 }

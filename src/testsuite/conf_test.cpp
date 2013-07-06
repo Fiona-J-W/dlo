@@ -36,11 +36,28 @@ int conf_test(){
 	
 	
 	swriteln(testfile,
-		"foo = \"bar\"\n",
-		"#comment\n",
-		"reference = foo\n",
-		"[ section ]\n",
-		"foo = \"baz\"");
+		"foo = \"bar\"\n"
+		"#comment\n"
+		"reference = foo\n"
+		
+		"ref1 = ref_base\n"
+		"ref2 = ref1\n"
+		"ref3 = ref2\n"
+		"ref4 = ref3\n"
+		"ref5 = ref4\n"
+		"ref6 = ref5\n"
+		"ref7 = ref6\n"
+		"ref8 = ref7\n"
+		"ref9 = ref8\n"
+		"ref10 = ref9\n"
+		"ref11 = ref10\n"
+		"ref12 = ref11\n"
+		"ref13 = ref12\n"
+		"ref_base = \"ref_base_text\"\n"
+		
+		"[ section ]\n"
+		"foo = \"baz\"\n"
+		);
 	
 	settings S("test");
 	
@@ -53,7 +70,7 @@ int conf_test(){
 		error("failed!");
 	}
 	
-	note(1, "testing reference resolving...");
+	note(1, "testing backward-reference resolving...");
 	if(S["reference"] == "bar"){
 		note(1,"success.");
 	}
@@ -69,6 +86,18 @@ int conf_test(){
 	else{
 		++fails;
 		error("failed!");
+	}
+	
+	note(1, "testing forward-reference-resolving...");
+	if(S["ref13"] == "ref_base_text"){
+		note(1,"success.");
+	}
+	else{
+		++fails;
+		error("failed!");
+		notef(2, "\twith ref_base=„%s“", S["ref_base"]);
+		notef(2, "\twith ref1=„%s“", S["ref_1"]);
+		notef(2, "\twith ref13=„%s“", S["ref_13"]);
 	}
 	
 	if(fails){
