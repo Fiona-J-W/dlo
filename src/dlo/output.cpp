@@ -85,7 +85,7 @@ void set_logfile(int fd, std::function<int(int)> close_fun){
 }
 
 
-void _debug(string filename, int line, int level, string text){
+void _debug(const string& filename, const string& function_name, int line, int level, const string& text){
 	if(level<=impl::debug_level){
 		string metadata = stringutils::textf("DEBUG(%s) [“%s”, %s]: ", level, filename, line);
 		print_and_log(metadata, text);
@@ -96,15 +96,15 @@ void set_debug_level(int d){
 	impl::debug_level=d;
 }
 
-void _writeln(string text){
+void _writeln(const string& text){
 	print_and_log(text);
 }
 
-void _writeln(std::ostream& stream, string text){
+void _writeln(std::ostream& stream, const string& text){
 	stream << text << endl;
 }
 
-void _note(int level, string text){
+void _note(int level, const string& text){
 	if(level <= impl::verbose_level ){
 		std::string prefix;
 		/* synchronize */{
@@ -115,11 +115,11 @@ void _note(int level, string text){
 	}
 }
 
-void _warn(string text){
+void _warn(const string& text){
 	print_and_log("WARNING: ", text, false);
 }
 
-void _error(string text){
+void _error(const string& text){
 	print_and_log("ERROR: ", text, false);
 }
 
@@ -128,7 +128,7 @@ class fatal_error_exception{
 };
 }
 
-void _fatal(string text){
+void _fatal(const string& text){
 	print_and_log("FATAL: ", text, false);
 	throw fatal_error_exception();
 }

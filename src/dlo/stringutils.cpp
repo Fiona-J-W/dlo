@@ -32,7 +32,7 @@ string strip(string str){
 
 
 
-vector<string> split(string str, string delim){
+vector<string> split(string str, const string& delim){
 	size_t pos = str.find(delim);
 	vector<string> data;
 	while( pos != string::npos ){

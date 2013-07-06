@@ -66,7 +66,7 @@ std::string strip(std::string str);
  * @param str string to be split
  * @param delim Delimeter that will be cut away
  */
-std::vector<std::string> split(std::string str, std::string delim=",");
+std::vector<std::string> split(std::string str, const std::string& delim=",");
 
 /**
  * split the given string at the first occurance of delim

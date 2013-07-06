@@ -44,7 +44,7 @@ void set_logfile(int fd, std::function<int(int)> close_fun = close);
  * @param ... parameters that will be converted to a string and printed
  */
 #define debug(level, ...) \
-	dlo::_debug( __FILE__, __LINE__, (level), dlo::stringutils::text(__VA_ARGS__) )
+	dlo::_debug( __FILE__, __func__, __LINE__, (level), dlo::stringutils::text(__VA_ARGS__) )
 
 /**
  * Print a debugmessage; this won't do anything in release-builds.
@@ -54,7 +54,7 @@ void set_logfile(int fd, std::function<int(int)> close_fun = close);
  * @param ... the args that will be converted to a string
  */
 #define debugf(level, formatstring, ...) \
-	dlo::_debug( __FILE__, __LINE__, (level), dlo::stringutils::textf((formatstring), __VA_ARGS__) )
+	dlo::_debug( __FILE__, __func__, __LINE__, (level), dlo::stringutils::textf((formatstring), __VA_ARGS__) )
 
 /**
  * Set the debug-level: only debug-messages with a level higher that this 
@@ -84,7 +84,7 @@ void set_verbosity(int level);
  *             form the message, that will be printed
  */
 template<typename... T>
-void writeln(T...args);
+void writeln(T&&...args);
 
 /**
  * Write a message to stdout.
@@ -93,7 +93,7 @@ void writeln(T...args);
  * @param args the args that will be converted to a string
  */
 template<typename... T>
-void writefln(const string& formatstring, T...args);
+void writefln(const string& formatstring, T&&...args);
 
 
 /**
@@ -106,7 +106,7 @@ void writefln(const string& formatstring, T...args);
  *             form the message, that will be printed
  */
 template<typename... T>
-void swriteln(std::ostream& stream, T...args);
+void swriteln(std::ostream& stream, T&&...args);
 
 /**
  * Write a message to a stream.
@@ -119,7 +119,7 @@ void swriteln(std::ostream& stream, T...args);
  * @param args the args that will be converted to a string
  */
 template<typename... T>
-void swritefln(std::ostream& stream, const string& formatstring, T...args);
+void swritefln(std::ostream& stream, const string& formatstring, T&&...args);
 
 /**
  * Print a note with the given urgency-level.
@@ -128,7 +128,7 @@ void swritefln(std::ostream& stream, const string& formatstring, T...args);
  *             form the message, that will be printed
  */
 template<typename... T>
-void note(int level, T...args);
+void note(int level, T&&...args);
 
 
 /**
@@ -139,7 +139,7 @@ void note(int level, T...args);
  * @param args the args that will be converted to a string
  */
 template<typename... T>
-void notef(int level, const string& formatstring, T...args);
+void notef(int level, const string& formatstring, T&&...args);
 
 
 /**
@@ -148,7 +148,7 @@ void notef(int level, const string& formatstring, T...args);
  *             form the message, that will be printed
  */
 template<typename... T>
-void warn(T... args);
+void warn(T&&... args);
 
 /**
  * Print a warning to stderr and log it, if a logfile is set.
@@ -157,7 +157,7 @@ void warn(T... args);
  * @param args the args that will be converted to a string
  */
 template<typename... T>
-void warnf(const string& formatstring, T... args);
+void warnf(const string& formatstring, T&&... args);
 
 
 /**
@@ -166,7 +166,7 @@ void warnf(const string& formatstring, T... args);
  *             form the message, that will be printed
  */
 template<typename... T>
-void error(T... args);
+void error(T&&... args);
 
 /**
  * Print an error to stderr and log it, if a logfile is set.
@@ -175,7 +175,7 @@ void error(T... args);
  * @param args the args that will be converted to a string
  */
 template<typename... T>
-void errorf(const string& formatstring, T... args);
+void errorf(const string& formatstring, T&&... args);
 
 /**
  * Print a fatal error. This will throw a private exception to terminate the
@@ -186,7 +186,7 @@ void errorf(const string& formatstring, T... args);
  *             form the message, that will be printed
  */
 template<typename... T>
-void fatal(T... args);
+void fatal(T&&... args);
 
 /**
  * Print a fatal error. This will throw a private exception to terminate the
@@ -198,7 +198,7 @@ void fatal(T... args);
  * @param args the args that will be converted to a string
  */
 template<typename... T>
-void fatalf(const string& formatstring, T... args);
+void fatalf(const string& formatstring, T&&... args);
 
 /**
  * Get the current time.
