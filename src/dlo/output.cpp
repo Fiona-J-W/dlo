@@ -12,10 +12,7 @@
 #include <ctime>
 #include <mutex>
 #include <atomic>
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+#include <fstream>
 
 namespace dlo{
 
@@ -27,14 +24,11 @@ using std::endl;
 
 string default_get_note_prefix(int level);
 
-// TODO: fix thread-safety
-
 //in fact, those are like private members:
 namespace impl{
 	static std::atomic_int verbose_level{0};
 	static std::atomic_int debug_level{0};
-	static int logfile{-1}; //filedescriptor
-	static std::function<int(int)> log_close_function = close;
+	static std::unique_ptr<std::ostream> logfile;
 	static std::mutex write_mutex;
 	static std::mutex note_prefix_mutex;
 	
@@ -45,49 +39,33 @@ namespace impl{
 	static std::function<string(int level)> get_note_prefix = default_get_note_prefix;
 }
 
-/**
- * internal function that closes the logfile and checks the states
- */
-void close_logfile(){
-	if(impl::logfile != -1){
-		if(impl::log_close_function){
-			impl::log_close_function(impl::logfile);
-		}
-		impl::logfile = -1;
-	}
-}
-
 void set_verbosity(int level){
 	impl::verbose_level=level;
 }
 
 int set_logfile(const string& filename){
-	std::lock_guard<std::mutex> guard{impl::write_mutex};
-	close_logfile();
+	std::unique_ptr<std::ostream> new_file {};
 	if(!filename.empty()){
-		impl::log_close_function = close;
-		if( (impl::logfile = open(filename.c_str(),O_WRONLY | O_CREAT | O_APPEND, 0666)) == -1){
-			error("Could not open logfile.");
-			return -1;
-		}
-		else{
-			return 0;
+		new_file = std::unique_ptr<std::ostream>{new std::ofstream{filename}};
+		if(!static_cast<std::ofstream*>(new_file.get())->is_open()){
+			return 1;
 		}
 	}
+	std::lock_guard<std::mutex> guard{impl::write_mutex};
+	std::swap(new_file, impl::logfile);
 	return 0;
 }
 
-void set_logfile(int fd, std::function<int(int)> close_fun){
+int set_logfile(std::unique_ptr<std::ostream>&& new_output){
 	std::lock_guard<std::mutex> guard{impl::write_mutex};
-	close_logfile();
-	impl::log_close_function = close_fun;
-	impl::logfile = fd;
+	std::swap(new_output, impl::logfile);
+	return 0;
 }
-
 
 void _debug(const string& filename, const string& function_name, int line, int level, const string& text){
 	if(level<=impl::debug_level){
-		string metadata = stringutils::textf("DEBUG(%s) [“%s”, %s]: ", level, filename, line);
+		string metadata = stringutils::textf("DEBUG(%s) [“%s”, %s (#%s)]: ", 
+				level, filename, function_name, line);
 		print_and_log(metadata, text);
 	}
 }
@@ -107,7 +85,7 @@ void _writeln(std::ostream& stream, const string& text){
 void _note(int level, const string& text){
 	if(level <= impl::verbose_level ){
 		std::string prefix;
-		/* synchronize */{
+		{ // synchronize
 			std::lock_guard<std::mutex> guard{impl::note_prefix_mutex};
 			prefix = impl::get_note_prefix(level);
 		}
@@ -134,13 +112,12 @@ void _fatal(const string& text){
 }
 
 string get_timestamp(){
-	static char buffer[30]="\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+	std::vector<char> buffer(30,0);
 	time_t t = time(NULL);
 	
-	strftime(buffer, 28, "%x %X", localtime(&t));
+	strftime(buffer.data(), buffer.size()-1, "%x %X", localtime(&t));
 	
-	
-	string returnstr = buffer;
+	string returnstr = buffer.data();
 	return returnstr;
 }
 
@@ -157,11 +134,11 @@ void print_and_log(const string& msg, bool normal){
 		std::lock_guard<std::mutex> guard{impl::write_mutex};
 		impl::write_error( msg );
 	}
+	string str = stringutils::prefix_and_align( "[" + get_timestamp() + "] ", msg + '\n');
 	std::lock_guard<std::mutex> guard{impl::write_mutex};
-	if( impl::logfile != -1 ){
-		string str = stringutils::prefix_and_align( "[" + get_timestamp() + "] ", msg + '\n');
-		if( write(impl::logfile, str.c_str(), str.size()) == -1 ){
-			cerr << "Error: Could not write to logfile, Errorcode:" << errno << endl;
+	if(impl::logfile){
+		if(!((*impl::logfile) << str)){
+			throw std::runtime_error{"could not write to logfile"};
 		}
 	}
 }

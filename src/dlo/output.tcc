@@ -23,7 +23,8 @@ void _error(const string& text);
 void _fatal(const string& text);
 
 #ifdef DEBUG
-void _debug(const string& filename, const string& function_name, int line, int level, const string& text);
+void _debug(const string& filename, const string& function_name, 
+		int line, int level, const string& text);
 #endif
 
 template<typename... T>

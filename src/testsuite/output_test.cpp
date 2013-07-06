@@ -25,7 +25,8 @@ int output_test(){
 	dlo::set_stdout_fun([&testout](const string& str){testout += str;});
 	dlo::set_stderr_fun([&testerr](const string& str){testerr += str;});
 	string debug_prefix;
-	const string raw_debug_prefix = "DEBUG(%s) [“" __FILE__ "”, %s]: ";
+	const string raw_debug_prefix = std::string{} + "DEBUG(%s) [“" + __FILE__ + "”, "
+		+ __func__ + " (#%s)]: ";
 	
 	//set default (test them later)
 	set_debug_level(1);

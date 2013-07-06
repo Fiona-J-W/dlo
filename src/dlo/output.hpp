@@ -6,6 +6,8 @@
 #include <sstream>
 #include <functional>
 #include <iostream>
+#include <memory>
+#include <ostream>
 
 #include <unistd.h>
 
@@ -30,11 +32,9 @@ int set_logfile(const string& filename);
 /**
  * set the logfile
  *
- * @param fd the filedescriptor to the logfile; -1 to disable loging
- * @param close_fun the function that will be used to close the fd, if it is replaced;
- *                  if it is NULL, no function will be executed
+ * @param new_output the pointer to the ostream that will be used for logging from now on
  */
-void set_logfile(int fd, std::function<int(int)> close_fun = close);
+int set_logfile(std::unique_ptr<std::ostream>&& new_output);
 
 #ifdef DEBUG
 
