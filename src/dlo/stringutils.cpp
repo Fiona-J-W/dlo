@@ -11,10 +11,10 @@
 namespace dlo{
 namespace stringutils{
 
-using namespace std;
+using std::string;
 
 string strip(string str){
-	size_t pos=0;
+	std::size_t pos=0;
 	while( pos < str.size() && isspace(str[pos])){
 		++pos;
 	}
@@ -33,7 +33,7 @@ string strip(string str){
 
 
 vector<string> split(string str, const string& delim){
-	size_t pos = str.find(delim);
+	std::size_t pos = str.find(delim);
 	vector<string> data;
 	while( pos != string::npos ){
 		data.push_back( str.substr(0, pos) );
@@ -44,11 +44,11 @@ vector<string> split(string str, const string& delim){
 	return data;
 }
 
-pair<string,string> split_once(string str, string delim){
-	pair<string, string> data;
-	size_t pos = str.find(delim);
+std::pair<string,string> split_once(string str, string delim){
+	std::pair<string, string> data;
+	std::size_t pos = str.find(delim);
 	if( pos == string::npos ){
-		throw invalid_argument("splitOnce(): delimeter not found");
+		throw std::invalid_argument("splitOnce(): delimeter not found");
 	}
 	data.first=str.substr(0,pos);
 	data.second=str.substr(pos+delim.size());
@@ -59,12 +59,12 @@ string decode(string str){
 	str=strip(str);
 	string returnstr="";
 	if(str[0] != '"' || str[str.size()-1] != '"'){
-		throw invalid_argument("decode(): no valid formatstring");
+		throw std::invalid_argument("decode(): no valid formatstring");
 	}
-	for(size_t pos=1; pos<str.size()-1 ; ++pos){
+	for(std::size_t pos=1; pos<str.size()-1 ; ++pos){
 		if( str[pos] != '\\'){
 			if( str[pos] == '"' ){
-				throw invalid_argument(
+				throw std::invalid_argument(
 					"decode(): no valid formatstring"
 				);
 			}
@@ -72,7 +72,7 @@ string decode(string str){
 		}
 		else{
 			if(pos+1 >= str.size()-1){
-				throw invalid_argument(
+				throw std::invalid_argument(
 					"decode(): no valid formatstring"
 				);
 			}
@@ -82,7 +82,7 @@ string decode(string str){
 				case 'n':  returnstr+='\n'; break;
 				case 't':  returnstr+='\t'; break;
 				case '"':  returnstr+='"';  break;
-				default : throw invalid_argument(
+				default : throw std::invalid_argument(
 						"decode(): no valid formatstring"
 					);
 			}
@@ -97,8 +97,8 @@ string textf_impl(const std::vector<string>& strings){
 	//(if people use it from outside without care it is THEIR fault, if this explodes)
 	assert(!strings.empty());
 	
-	ostringstream resultstream;
-	istringstream formatstream(strings[0]);
+	std::ostringstream resultstream;
+	std::istringstream formatstream(strings[0]);
 	string tmp;
 	unsigned int unspecified_inserts = 1;
 	while(getline(formatstream, tmp, '%')){
@@ -137,7 +137,7 @@ string textf_impl(const std::vector<string>& strings){
 
 
 std::string prefix_and_align(const std::string& prefix, const std::string& text){
-	stringstream textstream(text);
+	std::stringstream textstream(text);
 	string tmp;
 	string returnstring;
 	getline(textstream, tmp);
@@ -159,8 +159,8 @@ std::string prefix_and_align(const std::string& prefix, const std::string& text)
 	return returnstring;
 }
 
-size_t u8len(const std::string& str){
-	size_t returnval = 0;
+std::size_t u8len(const std::string& str){
+	std::size_t returnval = 0;
 	for(const auto c: str){
 		if( (~c) & (1 << 7) ){
 			++returnval;
