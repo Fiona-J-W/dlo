@@ -72,6 +72,7 @@ std::vector<std::string> split(std::string str, const std::string& delim=",");
  * split the given string at the first occurance of delim
  * @param str string to be split
  * @param delim Delimeter that will be cut away
+ * @throws std::invalid_argument if the delimeter is not found.
  */
 std::pair<std::string,std::string> split_once(std::string str, 
 	std::string delim=",");

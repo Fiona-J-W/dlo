@@ -46,9 +46,15 @@ vector<string> split(string str, const string& delim){
 
 std::pair<string,string> split_once(string str, string delim){
 	std::pair<string, string> data;
+	if(str.empty()){
+		throw std::invalid_argument{"split_once(): empty search-string"};
+	}
+	if(delim.empty()){
+		throw std::invalid_argument{"split_once(): empty delimeter"};
+	}
 	std::size_t pos = str.find(delim);
 	if( pos == string::npos ){
-		throw std::invalid_argument("splitOnce(): delimeter not found");
+		throw std::invalid_argument("split_once(): delimeter not found");
 	}
 	data.first=str.substr(0,pos);
 	data.second=str.substr(pos+delim.size());
